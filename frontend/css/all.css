@@ -105,7 +105,7 @@ border-radius: 5px;
 }
 
 
-.modal {
+.Modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -129,14 +129,14 @@ border-radius: 5px;
     height: 60%;
   }
   
-  .close:hover,
-.close:focus {
+  .lclose:hover,
+.lclose:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
 }
 
-.Form-login {
+.Form {
     display: flex;
     flex-direction: column;
 }

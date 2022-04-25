@@ -11,8 +11,8 @@
   <body class="Body">
     <nav class="Navbar">
       <div class="Navbar-buttons">
-        <span><button class="Nav-Register-btn">Register</button></span>
-        <span><button id="myBtn" class="Nav-Login-btn">Login</button></span>
+        <span><button id="registerBtn" class="Nav-Register-btn">Register</button></span>
+        <span><button id="loginBtn" class="Nav-Login-btn">Login</button></span>
       </div>
     </nav>
 
@@ -26,16 +26,16 @@
     </div>
 
     <!-- The Login Modal -->
-    <div id="myModal" class="modal">
+    <div id="loginModal" class="Modal">
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="lclose">&times;</span>
         <h1>Login</h1>
         <div>
           <center>
             <br /><br />
 
-            <form class="Form-login">
+            <form class="Form">
                 <div class="Form-login-inputBox">
                     <label> User Name</label>
                     <input name="userName" />
@@ -54,6 +54,37 @@
         </div>
       </div>
     </div>
+
+
+     <!-- The Register Modal -->
+     <div id="registerModal" class="Modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="rclose">&times;</span>
+          <h1>Register</h1>
+          <div>
+            <center>
+              <br /><br />
+  
+              <form class="Form">
+                  <div class="Form-login-inputBox">
+                      <label> User Name</label>
+                      <input name="userName" />
+                    </div>
+                    <br />
+                <div class="Form-login-inputBox">
+                  <label>Password</label>
+                  <input name="password" />
+                </div>
+                <button class="Form-login-btn">Login</button>
+              </form>
+              <div class="Form-login-Signup-div">
+                  <p>Need an account?</p><button class="Form-login-Signup-btn">SIGN UP</button>
+              </div>
+            </center>
+          </div>
+        </div>
+      </div>
 
 
 
