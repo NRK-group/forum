@@ -79,7 +79,7 @@ display: flex;
 flex-direction: row;
 align-items: center;
 padding: 12px 20px;
-
+margin: 4px;
 
 height: 38px;
 left: 1204px;
@@ -94,7 +94,7 @@ border-radius: 5px;
 flex-direction: row;
 align-items: center;
 padding: 12px 20px;
-
+margin: 4px;
 height: 38px;
 left: 1333px;
 top: 23px;
@@ -126,7 +126,7 @@ border-radius: 5px;
     padding: 20px;
     border: 1px solid #888;
     width: 40%;
-    height: 80%;
+    height: 60%;
   }
   
   .close:hover,
@@ -134,4 +134,44 @@ border-radius: 5px;
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+.Form-login {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+  border-radius: 8px;
+  height: 25px;
+  width: 250px;
+}
+
+.Form-login-btn {
+    margin-top: 120px;
+    height: 35px;
+    width: 210px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 8px;
+    background: #AC131D;
+}
+
+.Form-login-inputBox {
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    text-align: initial;
+}
+
+.Form-login-Signup-btn {
+    background: none;
+    border: none;
+}
+
+.Form-login-Signup-div {
+    display: flex;
+    justify-content: center;
 }
