@@ -156,6 +156,7 @@ func PostProcessTrial(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	/*
 	db, _ := sql.Open("sqlite3", "./forum.db")
 	user := CreateDatabase(db)
 	password, _ := HashPassword("hello")
@@ -190,6 +191,7 @@ func main() {
 		CommentID:  "1",
 		React:      0,
 	})
+	*/
 	http.HandleFunc("/", PostProcessTrial)
 	cssPath := http.FileServer(http.Dir("./frontend"))
 	http.Handle("/frontend/", http.StripPrefix("/frontend/", cssPath)) // handling the CSS

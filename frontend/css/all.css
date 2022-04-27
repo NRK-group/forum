@@ -1,135 +1,192 @@
-h1 {
-    color: blue;
-}
-
 .Body {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    background: #1a1818;
-    height: 100vh;
-    width: 100vw;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background: #1a1818;
+  height: 100vh;
+  width: 100vw;
 }
 
 .Sidebar {
-position: absolute;
-width: 40vw;
-height: 100vh;
-left: 0px;
-top: 84px;
-background: #1b42d1;
+  position: absolute;
+  width: 18vw;
+  height: 100vh;
+  left: 0px;
+  top: 5vh;
+  background: #1b42d1;
 }
 
 .Menu {
-    /* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-position: absolute;
-width: 39vw;
-height: 167px;
-left: 0px;
-top: 111px;
-background: #d11b1b;
-padding: 6px;
+  /* Auto layout */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  width: 14vw;
+  height: 167px;
+  left: 0px;
+  top: 111px;
+  background: #d11b1b;
+  padding: 6px;
 }
 
 .Menu-Item-Search {
-position: absolute;
-width: 39vw;
-height: 41px;
-left: 0px;
-top: 40px;
-padding: 6px;
+  position: absolute;
+  width: 14vw;
+  height: 41px;
+  left: 0px;
+  top: 40px;
+  padding: 6px;
 
-background: #d11b1b;
+  background: #d11b1b;
+}
+
+.CommentArea {
+  background: #d11b1b;
+  margin-left: 18vw;
+  width: 60vw;
+  height: 100vh;
+  top: 5vh;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  overflow: scroll;
+
+}
+
+.Comment {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 5px 3px;
+
+
+width: 54vw;
+height: 22vh;
+
+
+background: #FFFFFF;
+/* Border */
+border: 1px solid #EAEAEA;
+box-sizing: border-box;
+/* Shadow */
+box-shadow: 2px 1px 5px rgba(0, 0, 0, 0.15);
+border-radius: 5px;
+
+margin-right: auto;
+margin-left: auto;
+margin-top: 3vh;
+}
+
+.Help-box {
+    /* Auto layout */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  width: 18vw;
+  height: 267px;
+  top: 7vh;
+  background: #d11b1b;
+  padding: 6px;
+  margin-left: 79vw;
 }
 
 .Navbar {
-position: absolute;
-height: 84px;
-left: 0px;
-right: 0px;
-top: 0px;
-width: 100vw;
-overflow: hidden;
-background: #FFFFFF;
-/* Border */
-
+  position: absolute;
+  height: 5vh;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  width: 100vw;
+  overflow: hidden;
+  background: #ffffff;
+  /* Border */
 }
 
 .Navbar-Logo {
-    position: absolute;
-    width: 112px;
-    height: 29.6px;
-    left: 50px;
-    top: 27px;
-    
+  position: absolute;
+  width: 112px;
+  height: 29.6px;
+  left: 50px;
+  top: 27px;
 }
 
 .Navbar-buttons {
-    display: flex;
-    padding: 6px;
-    float: right;
-    margin-top: 20px
+  display: flex;
+  float: right;
 }
 
 .Nav-Register-btn {
-display: flex;
-flex-direction: row;
-align-items: center;
-padding: 12px 20px;
-margin: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 20px;
+  margin: 4px;
 
-height: 38px;
-left: 1204px;
-top: 23px;
+  height: 38px;
+  left: 1204px;
+  top: 23px;
 
-background: #AC131D;
-border-radius: 5px;
+  background: #ac131d;
+  border-radius: 5px;
 }
 
 .Nav-Login-btn {
-    display: flex;
-flex-direction: row;
-align-items: center;
-padding: 12px 20px;
-margin: 4px;
-height: 38px;
-left: 1333px;
-top: 23px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 20px;
+  margin: 4px;
+  height: 38px;
+  left: 1333px;
+  top: 23px;
 
-/* Border */
-background: #EAEAEA;
-border-radius: 5px;
+  /* Border */
+  background: #eaeaea;
+  border-radius: 5px;
 }
 
-
 .Modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
 
-  /* Modal Content */
+.Rmodal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 40%;
-    height: 60%;
-  }
-  
-  .lclose:hover,
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 25%;
+  height: 60%;
+  border-radius: 8px;
+}
+
+.lclose:hover,
 .lclose:focus {
   color: #000;
   text-decoration: none;
@@ -137,8 +194,8 @@ border-radius: 5px;
 }
 
 .Form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 input {
@@ -147,31 +204,34 @@ input {
   width: 250px;
 }
 
-.Form-login-btn {
-    margin-top: 120px;
-    height: 35px;
-    width: 210px;
-    margin-right: auto;
-    margin-left: auto;
-    border-radius: 8px;
-    background: #AC131D;
+.Form-btn {
+  margin-top: 120px;
+  height: 35px;
+  width: 210px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 8px;
+  background: #ac131d;
+  font-size: large;
 }
 
 .Form-login-inputBox {
-    margin-right: auto;
-    margin-left: auto;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    text-align: initial;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  text-align: initial;
 }
 
 .Form-login-Signup-btn {
-    background: none;
-    border: none;
+  background: none;
+  border: none;
+  font-size: large;
+  cursor: pointer;
 }
 
 .Form-login-Signup-div {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }

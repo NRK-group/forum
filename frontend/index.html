@@ -9,6 +9,8 @@
   </head>
 
   <body class="Body">
+    
+     <!-- Navbar -->
     <nav class="Navbar">
       <div class="Navbar-buttons">
         <span><button id="registerBtn" class="Nav-Register-btn">Register</button></span>
@@ -16,6 +18,7 @@
       </div>
     </nav>
 
+    <!-- Sidebar -->
     <div class="Sidebar">
       <div class="Menu-Item-Search">
         <p>Search</p>
@@ -24,6 +27,26 @@
         <p>MENU</p>
       </div>
     </div>
+
+  <!-- Comment Area -->
+    <div class="CommentArea">
+
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+      <div class="Comment"></div>
+  
+    </div>
+
+    <div class="Help-box">
+
+    </div>
+    
 
     <!-- The Login Modal -->
     <div id="loginModal" class="Modal">
@@ -34,7 +57,6 @@
         <div>
           <center>
             <br /><br />
-
             <form class="Form">
                 <div class="Form-login-inputBox">
                     <label> User Name</label>
@@ -45,10 +67,10 @@
                 <label>Password</label>
                 <input name="password" />
               </div>
-              <button class="Form-login-btn">Login</button>
+              <button class="Form-btn">Login</button>
             </form>
             <div class="Form-login-Signup-div">
-                <p>Need an account?</p><button class="Form-login-Signup-btn">SIGN UP</button>
+                <p>Need an account?</p><button id="registerBtnl" class="Form-login-Signup-btn">SIGN UP</button>
             </div>
           </center>
         </div>
@@ -57,7 +79,7 @@
 
 
      <!-- The Register Modal -->
-     <div id="registerModal" class="Modal">
+     <div id="registerModal" class="Rmodal">
         <!-- Modal content -->
         <div class="modal-content">
           <span class="rclose">&times;</span>
@@ -65,21 +87,25 @@
           <div>
             <center>
               <br /><br />
-  
               <form class="Form">
                   <div class="Form-login-inputBox">
                       <label> User Name</label>
                       <input name="userName" />
                     </div>
                     <br />
+                    <div class="Form-login-inputBox">
+                      <label>Email</label>
+                      <input name="email" />
+                    </div>
+                    <br />
                 <div class="Form-login-inputBox">
                   <label>Password</label>
                   <input name="password" />
                 </div>
-                <button class="Form-login-btn">Login</button>
+                <button class="Form-btn">Register</button>
               </form>
               <div class="Form-login-Signup-div">
-                  <p>Need an account?</p><button class="Form-login-Signup-btn">SIGN UP</button>
+                  <p>Already a user?</p><button id="loginBtnr"  class="Form-login-Signup-btn">LOGIN</button>
               </div>
             </center>
           </div>
