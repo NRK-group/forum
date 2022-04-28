@@ -13,6 +13,13 @@ type User struct {
 	DateCreated string
 	Password    string
 }
+type Session struct {
+	SessionID string
+	UserID    string
+	UserAgent string
+	IpAddress string
+	LoginTime string
+}
 type Post struct {
 	PostID      string
 	UserID      string
