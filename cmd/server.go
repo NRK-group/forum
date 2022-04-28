@@ -21,7 +21,7 @@ func PostProcessTrial(w http.ResponseWriter, r *http.Request) {
 func main() {
 	db, _ := sql.Open("sqlite3", "./database/forum.db")
 	Forum := database.CreateDatabase(db)
-	r, err := Forum.AddUser("sadasd", "hasd@gmail.com", "hello1235")
+	r, err := Forum.CreateUser("sadasd", "hasd@gmail.com", "hello1235")
 	if err != nil {
 		fmt.Print(err)
 	} else {

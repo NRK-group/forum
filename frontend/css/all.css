@@ -10,9 +10,9 @@
 .Sidebar {
   position: absolute;
   width: 18vw;
-  height: 100vh;
+  height: 95vh;
   left: 0px;
-  top: 5vh;
+  top: 6vh;
   background: #1b42d1;
 }
 
@@ -41,45 +41,90 @@
   background: #d11b1b;
 }
 
-.CommentArea {
+.Comments-section {
   background: #d11b1b;
   margin-left: 18vw;
   width: 60vw;
-  height: 100vh;
-  top: 5vh;
+  height: 95vh;
+  top: 6vh;
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
   overflow: scroll;
-
 }
 
 .Comment {
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 5px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 3px;
 
+  width: 54vw;
+  min-height: 22vh;
 
-width: 54vw;
-height: 22vh;
+  background: #ffffff;
+  /* Border */
+  border: 1px solid #eaeaea;
+  box-sizing: border-box;
+  /* Shadow */
+  box-shadow: 2px 1px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
 
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 3vh;
+}
 
-background: #FFFFFF;
-/* Border */
-border: 1px solid #EAEAEA;
-box-sizing: border-box;
-/* Shadow */
-box-shadow: 2px 1px 5px rgba(0, 0, 0, 0.15);
-border-radius: 5px;
+.Comment-header {
+  width: 53vw;
+  height: 6vh;
+ /* background: #d1eb07;*/
+}
 
-margin-right: auto;
-margin-left: auto;
-margin-top: 3vh;
+.Comment-body {
+  width: 53vw;
+  min-height: 13vh;
+ /* background: #59eb0a; */
+}
+
+.Comment-footer {
+  width: 53vw;
+  height: 3vh;
+  color: #888;
+ /* background: #07aeeb; */
+}
+
+.chip {
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+}
+
+.chip img {
+  float: left;
+  margin: 0 10px 0 -25px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.Category {
+  background-color: rgb(226, 226, 226);
+  padding: 5px 10px;
+  border-radius: 10%;
+  margin-right: 6px;
+  margin-left: 6px;
+}
+
+.Left-Comment-footer {
+    float: right;
 }
 
 .Help-box {
-    /* Auto layout */
+  /* Auto layout */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -94,7 +139,7 @@ margin-top: 3vh;
 
 .Navbar {
   position: absolute;
-  height: 5vh;
+  height: 6vh;
   left: 0px;
   right: 0px;
   top: 0px;
