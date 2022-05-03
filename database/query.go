@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"forum/password"
 	"time"
@@ -154,9 +155,12 @@ func (forum *Forum) Update(table, set, to, where, id string) error {
 
 // Start of the Select query
 
-func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (string, string, bool) {
+func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (string, string, error) {
 	var users User
-	rows, _ := forum.DB.Query("SELECT * FROM User WHERE username = '" + userName + "'")
+	rows, err := forum.DB.Query("SELECT * FROM User WHERE username = '" + userName + "'")
+	if err != nil {
+		return "", "", err
+	}
 	var userID, sessionID, username, email, dateCreated, pass string
 	for rows.Next() {
 		// fmt.Println(rows, "lol")s
@@ -170,12 +174,18 @@ func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (stri
 			Password:    pass,
 		}
 	}
+	if users.Username == "" {
+		return "", "", errors.New("user not found")
+	}
 	if !(password.CheckPasswordHash(pas, users.Password)) {
-		return "", "", false
+		return "", "", errors.New("password not macth")
 	}
 	if users.SessionID == "" {
-		sess, _ := forum.CreateSession(users.UserID, userAgent, ipAddress)
+		sess, err := forum.CreateSession(users.UserID, userAgent, ipAddress)
+		if err != nil {
+			return "", "", err
+		}
 		users.SessionID = sess
 	}
-	return users.UserID, users.Username, true
+	return users.UserID, users.Username, nil
 }
