@@ -34,3 +34,36 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+
+func Register(w http.ResponseWriter, r *http.Request ) {
+
+
+	if r.URL.Path != "/register" {
+		http.Error(w, "404 not found.", http.StatusNotFound)
+		return
+	}
+
+	switch r.Method {
+	case "POST":
+		userName := r.FormValue("userName")
+		password := r.FormValue("password")
+		email := r.FormValue("email")
+
+		db, _ := sql.Open("sqlite3", "./database/forum.db")
+	Forum := database.CreateDatabase(db)
+
+	userID , sessionID , _ := Forum.CreateUser(userName, email, "userAgent", "ipAddress", password)
+
+	db.Close()
+		
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-type", "application/text")
+		w.Write([]byte(userID + sessionID ))
+
+	default:
+		fmt.Fprintf(w, "Sorry, only POST methods are supported.")
+	}
+
+
+}
