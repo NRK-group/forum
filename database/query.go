@@ -17,14 +17,20 @@ var Date = time.Now().Format("2006-January-01 15:04:05")
 func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass string) (string, string, error) {
 	userID := uuid.NewV4()
 	pass, _ = password.HashPassword(pass)
-	stmt, _ := forum.DB.Prepare(`
+	stmt, err := forum.DB.Prepare(`
 		INSERT INTO User (userID, username, dateCreated, email, password) values (?, ?, ?, ?, ?)
 	`)
-	_, err := stmt.Exec(userID, username, Date, email, pass)
 	if err != nil {
 		return "", "", err
 	}
-	sessionID, _ := forum.CreateSession(userID.String(), userAgent, ipAddress)
+	_, err = stmt.Exec(userID, username, Date, email, pass)
+	if err != nil {
+		return "", "", err
+	}
+	sessionID, err := forum.CreateSession(userID.String(), userAgent, ipAddress)
+	if err != nil {
+		return "", "", err
+	}
 	return userID.String(), sessionID, nil
 }
 
@@ -147,3 +153,29 @@ func (forum *Forum) Update(table, set, to, where, id string) error {
 }
 
 // Start of the Select query
+
+func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (string, string, bool) {
+	var users User
+	rows, _ := forum.DB.Query("SELECT * FROM User WHERE username = '" + userName + "'")
+	var userID, sessionID, username, email, dateCreated, pass string
+	for rows.Next() {
+		// fmt.Println(rows, "lol")s
+		rows.Scan(&userID, &username, &email, &dateCreated, &pass, &sessionID)
+		users = User{
+			UserID:      userID,
+			SessionID:   sessionID,
+			Username:    username,
+			Email:       email,
+			DateCreated: dateCreated,
+			Password:    pass,
+		}
+	}
+	if !(password.CheckPasswordHash(pas, users.Password)) {
+		return "", "", false
+	}
+	if users.SessionID == "" {
+		sess, _ := forum.CreateSession(users.UserID, userAgent, ipAddress)
+		users.SessionID = sess
+	}
+	return users.UserID, users.Username, true
+}
