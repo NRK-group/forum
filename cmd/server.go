@@ -1,9 +1,8 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"forum/database"
+	"forum/handler"
 	"html/template"
 	"log"
 	"net/http"
@@ -18,21 +17,12 @@ func PostProcessTrial(w http.ResponseWriter, r *http.Request) {
 	}
 	t.Execute(w, "Hello")
 }
+
 func main() {
-	db, _ := sql.Open("sqlite3", "./database/forum.db")
-	Forum := database.CreateDatabase(db)
-	r, err := Forum.CreateUser("sadasd", "hasd@gmail.com", "hello1235")
-	if err != nil {
-		fmt.Print(err)
-	} else {
-		fmt.Print(r)
-	}
-	// err1 := Forum.Delete("sad")
-	// if err1 != nil {
-	// 	fmt.Print(err1)
-	// }
-	defer db.Close()
+
 	http.HandleFunc("/", PostProcessTrial)
+	http.HandleFunc("/register", handler.Register)
+	http.HandleFunc("/login", handler.Login)
 	cssPath := http.FileServer(http.Dir("./frontend"))
 	http.Handle("/frontend/", http.StripPrefix("/frontend/", cssPath)) // handling the CSS
 	fmt.Printf("Starting server at port 8800\n")

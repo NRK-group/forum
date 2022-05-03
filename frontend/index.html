@@ -13,8 +13,13 @@
      <!-- Navbar -->
     <nav class="Navbar">
       <div class="Navbar-buttons">
+        <div id="Not_Login" class="Not_Login">
         <span><button id="registerBtn" class="Nav-Register-btn">Register</button></span>
         <span><button id="loginBtn" class="Nav-Login-btn">Login</button></span>
+      </div>
+      <div id="Login" class="Login">
+        <span><button id="logoutBtn" class="Nav-Logout-btn">Logout</button></span>
+      </div>
       </div>
     </nav>
 
@@ -213,14 +218,14 @@
             <form class="Form">
                 <div class="Form-login-inputBox">
                     <label> User Name</label>
-                    <input name="userName" />
+                    <input id="userName" name="userName" />
                   </div>
                   <br />
               <div class="Form-login-inputBox">
                 <label>Password</label>
-                <input name="password" />
+                <input id="password" name="password" />
               </div>
-              <button class="Form-btn">Login</button>
+              <button id="form-btn-login" class="Form-btn-login">Login</button>
             </form>
             <div class="Form-login-Signup-div">
                 <p>Need an account?</p><button id="registerBtnl" class="Form-login-Signup-btn">SIGN UP</button>
@@ -243,19 +248,19 @@
               <form class="Form">
                   <div class="Form-login-inputBox">
                       <label> User Name</label>
-                      <input name="userName" />
+                      <input id="rUserName" name="userName" />
                     </div>
                     <br />
                     <div class="Form-login-inputBox">
                       <label>Email</label>
-                      <input name="email" />
+                      <input id="rEmail" name="email" />
                     </div>
                     <br />
                 <div class="Form-login-inputBox">
                   <label>Password</label>
-                  <input name="password" />
+                  <input id="rPassword" name="password" />
                 </div>
-                <button class="Form-btn">Register</button>
+                <button id="form-btn-register" class="Form-btn-register">Register</button>
               </form>
               <div class="Form-login-Signup-div">
                   <p>Already a user?</p><button id="loginBtnr"  class="Form-login-Signup-btn">LOGIN</button>

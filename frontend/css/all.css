@@ -192,6 +192,29 @@
   border-radius: 5px;
 }
 
+.Nav-Logout-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 20px;
+  margin: 4px;
+  height: 38px;
+  left: 1333px;
+  top: 23px;
+
+  /* Border */
+  background: #eaeaea;
+  border-radius: 5px;
+}
+
+.Not_Login{
+  display: flex;
+}
+
+.Login {
+  display: none;
+}
+
 .Modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -249,8 +272,19 @@ input {
   width: 250px;
 }
 
-.Form-btn {
-  margin-top: 120px;
+.Form-btn-login {
+  margin-top: 3vh;
+  height: 35px;
+  width: 210px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 8px;
+  background: #ac131d;
+  font-size: large;
+}
+
+.Form-btn-register {
+  margin-top: 3vh;
   height: 35px;
   width: 210px;
   margin-right: auto;
