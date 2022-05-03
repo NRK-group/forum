@@ -8,6 +8,7 @@ type Forum struct {
 
 type User struct {
 	UserID      string
+	SessionID   string
 	Username    string
 	Email       string
 	DateCreated string
