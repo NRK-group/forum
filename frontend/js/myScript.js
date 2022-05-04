@@ -1,6 +1,6 @@
 
 
-
+let session;
 
 // Get the login modal
 let lmodal = document.getElementById("loginModal");
@@ -23,7 +23,7 @@ fbtn_login.onclick = function(event) {
   event.preventDefault();
   let data = new FormData();
 
-  // (B2) APPEND FIELDS
+ 
   data.append("userName", document.getElementById("userName").value);
   data.append("password", document.getElementById("password").value);
 
@@ -38,7 +38,11 @@ fbtn_login.onclick = function(event) {
     return response.text()
   }).then(function(text) {
       //text is the server's response
+      navbutdivnl.style.display ="none"
+      navbutdivl.style.display ="block"
+      lmodal.style.display = "none";
       console.log(text)
+      lmodal.style.display = "none";
   });
   
 }
@@ -107,6 +111,7 @@ fbtn_register.onclick = function(event) {
   for (let [k, v] of data.entries()) { console.log(k, v); }
   navbutdivnl.style.display ="none"
   navbutdivl.style.display ="block"
+  rmodal.style.display = "none";
 
 }
 
@@ -140,10 +145,45 @@ window.onclick = function(event) {
 }
 
 
-// Login function
+// logout function
+
+// Get the button that logout the user
+let logoutBtn = document.getElementById("logoutBtn");
+ 
+// When the user clicks on logoutBtn that logout the user
+
+logoutBtn.onclick = function() {
+
+  let data = new FormData();
+  console.log("text")
+  fetch("http://localhost:8800/logout",
+  {   method: 'POST',
+      body : data
+  })
+  .then(function(response) {
+    return response.text()
+  }).then(function(text) {
+      //text is the server's response
+      console.log(text)
+  });
+
+  //data.append("Session", );
+  navbutdivnl.style.display ="flex"
+  navbutdivl.style.display ="none"
+}
 
 
-const Login = (event)=> {
 
+// onload
+
+const Onload = (cookie)=> {
+
+  session = cookie.split("&")
+
+  if (session) {
+    navbutdivnl.style.display ="none"
+    navbutdivl.style.display ="block"
+  }
+  console.log(session)
 
 }

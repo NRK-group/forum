@@ -181,7 +181,7 @@ func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (stri
 		return "", "", "", errors.New("password not macth")
 	}
 	if users.SessionID != "" {
-		return "", "", "", errors.New("session exists")
+		forum.RemoveSession(users.SessionID)
 	}
 	sess, err := forum.CreateSession(users.UserID, userAgent, ipAddress)
 	if err != nil {
