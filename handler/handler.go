@@ -24,7 +24,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		db, _ := sql.Open("sqlite3", "./database/forum.db")
 		Forum := database.CreateDatabase(db)
-		UserID, Username, SessionID, _ := Forum.LoginUsers(userName, "userAgent", "ipAddress", password)
+		UserID, Username, SessionID, _ := Forum.LoginUsers(userName, r.UserAgent(), GetIP(r), password)
 
 		db.Close()
 
@@ -43,6 +43,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+func GetIP(r *http.Request) string {
+	forwarded := r.Header.Get("X-FORWARDED-FOR")
+	if forwarded != "" {
+		return forwarded
+	}
+	return r.RemoteAddr
+}
 
 func Register(w http.ResponseWriter, r *http.Request) {
 
@@ -60,7 +67,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		db, _ := sql.Open("sqlite3", "./database/forum.db")
 		Forum := database.CreateDatabase(db)
 
-		UserID, Username, SessionID, _ := Forum.CreateUser(userName, email, "userAgent", "ipAddress", password)
+		UserID, Username, SessionID, _ := Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
 
 		db.Close()
 
@@ -110,7 +117,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 		db.Close()
 
-		// Set the new token as the users `session_token` cookie 
+		// Set the new token as the users `session_token` cookie
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
 			Value:   "",
