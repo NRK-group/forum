@@ -126,8 +126,8 @@ func (forum *Forum) Delete(table, where, value string) error {
 }
 
 // RemoveSession
-func (forum *Forum) RemoveSession(userID, sessionID string) error {
-	err := forum.Update("User", "sessionID", "", "userID", userID)
+func (forum *Forum) RemoveSession(sessionID string) error {
+	err := forum.Update("User", "sessionID", "", "sessionID", sessionID)
 	if err != nil {
 		return err
 	}
@@ -180,12 +180,13 @@ func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (stri
 	if !(password.CheckPasswordHash(pas, users.Password)) {
 		return "", "", errors.New("password not macth")
 	}
-	if users.SessionID == "" {
-		sess, err := forum.CreateSession(users.UserID, userAgent, ipAddress)
-		if err != nil {
-			return "", "", err
-		}
-		users.SessionID = sess
+	if users.SessionID != "" {
+		return "", "", errors.New("session exists")
 	}
-	return users.UserID, users.Username, nil
+	sess, err := forum.CreateSession(users.UserID, userAgent, ipAddress)
+	if err != nil {
+		return "", "", err
+	}
+	users.SessionID = sess
+	return users.SessionID, users.Username, nil
 }
