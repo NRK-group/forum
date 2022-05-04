@@ -15,24 +15,24 @@ var Date = time.Now().Format("2006-January-01 15:04:05")
 
 // CreateUser
 // is a method of database that add user in it.
-func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass string) (string, string, error) {
+func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass string) (string, string, string, error) {
 	userID := uuid.NewV4()
 	pass, _ = password.HashPassword(pass)
 	stmt, err := forum.DB.Prepare(`
 		INSERT INTO User (userID, username, dateCreated, email, password) values (?, ?, ?, ?, ?)
 	`)
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
 	_, err = stmt.Exec(userID, username, Date, email, pass)
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
 	sessionID, err := forum.CreateSession(userID.String(), userAgent, ipAddress)
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
-	return userID.String(), sessionID, nil
+	return userID.String(), username, sessionID, nil
 }
 
 // CreateSession
@@ -155,11 +155,11 @@ func (forum *Forum) Update(table, set, to, where, id string) error {
 
 // Start of the Select query
 
-func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (string, string, error) {
+func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (string, string, string, error) {
 	var users User
 	rows, err := forum.DB.Query("SELECT * FROM User WHERE username = '" + userName + "'")
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
 	var userID, sessionID, username, email, dateCreated, pass string
 	for rows.Next() {
@@ -175,18 +175,18 @@ func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (stri
 		}
 	}
 	if users.Username == "" {
-		return "", "", errors.New("user not found")
+		return "", "", "", errors.New("user not found")
 	}
 	if !(password.CheckPasswordHash(pas, users.Password)) {
-		return "", "", errors.New("password not macth")
+		return "", "", "", errors.New("password not macth")
 	}
 	if users.SessionID != "" {
-		return "", "", errors.New("session exists")
+		return "", "", "", errors.New("session exists")
 	}
 	sess, err := forum.CreateSession(users.UserID, userAgent, ipAddress)
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
 	users.SessionID = sess
-	return users.SessionID, users.Username, nil
+	return users.UserID, users.Username, users.SessionID, nil
 }
