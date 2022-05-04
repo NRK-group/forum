@@ -21,13 +21,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		db, _ := sql.Open("sqlite3", "./database/forum.db")
 		Forum := database.CreateDatabase(db)
-		userId, userN, _ := Forum.LoginUsers(userName, "userAgent", "ipAddress", password)
+		UserID, Username, SessionID, _ := Forum.LoginUsers(userName, "userAgent", "ipAddress", password)
 
 		db.Close()
 
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(userId + "-" + userN))
+		w.Write([]byte(UserID + "-" + Username + "-" + SessionID))
 
 	default:
 		fmt.Fprintf(w, "Sorry, only POST methods are supported.")
@@ -53,13 +53,13 @@ func Register(w http.ResponseWriter, r *http.Request ) {
 		db, _ := sql.Open("sqlite3", "./database/forum.db")
 	Forum := database.CreateDatabase(db)
 
-	userID , sessionID , _ := Forum.CreateUser(userName, email, "userAgent", "ipAddress", password)
+	UserID, Username, SessionID, _:= Forum.CreateUser(userName, email, "userAgent", "ipAddress", password)
 
 	db.Close()
 		
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(userID + sessionID ))
+		w.Write([]byte(UserID + SessionID + Username ))
 
 	default:
 		fmt.Fprintf(w, "Sorry, only POST methods are supported.")
