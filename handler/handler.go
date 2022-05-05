@@ -1,47 +1,57 @@
 package handler
 
 import (
-	"database/sql"
 	"fmt"
 	"forum/database"
+	"html/template"
+	"log"
 	"net/http"
 	"strings"
 	"time"
 )
 
-func Login(w http.ResponseWriter, r *http.Request) {
+type Env struct {
+	Forum *database.Forum
+}
 
+func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("frontend/index.html")
+	if err != nil {
+		http.Error(w, "500 Internal error", http.StatusInternalServerError)
+		return
+	}
+	c, err := r.Cookie("session_token")
+	// co := strings.Split(c.Value, "&")
+	if err != nil {
+		// a, _ := fmt.Fprintf(w, "err")
+		t.Execute(w, err.Error())
+	} else {
+		t.Execute(w, c.Value)
+	}
+}
+
+func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/login" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
 	switch r.Method {
 	case "POST":
-
 		userName := r.FormValue("userName")
 		password := r.FormValue("password")
-
-		db, _ := sql.Open("sqlite3", "./database/forum.db")
-		Forum := database.CreateDatabase(db)
-		UserID, Username, SessionID, _ := Forum.LoginUsers(userName, r.UserAgent(), GetIP(r), password)
-
-		db.Close()
+		UserID, Username, SessionID, _ := env.Forum.LoginUsers(userName, r.UserAgent(), GetIP(r), password)
 
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
-			Value:   SessionID + "&" + UserID + "&" + Username,
+			Value:   UserID + "&" + SessionID + "&" + Username,
 			Expires: time.Now().Add(24 * time.Hour),
 		})
-
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(UserID + "-" + Username + "-" + SessionID))
-
+		w.Write([]byte(UserID + "-" + SessionID + "-" + Username))
 	default:
-		fmt.Fprintf(w, "Sorry, only POST methods are supported.")
+		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 	}
-
 }
 func GetIP(r *http.Request) string {
 	forwarded := r.Header.Get("X-FORWARDED-FOR")
@@ -51,52 +61,43 @@ func GetIP(r *http.Request) string {
 	return r.RemoteAddr
 }
 
-func Register(w http.ResponseWriter, r *http.Request) {
-
+func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/register" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
 	switch r.Method {
 	case "POST":
 		userName := r.FormValue("userName")
 		password := r.FormValue("password")
 		email := r.FormValue("email")
-
-		db, _ := sql.Open("sqlite3", "./database/forum.db")
-		Forum := database.CreateDatabase(db)
-
-		UserID, Username, SessionID, _ := Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
-
-		db.Close()
-
+		if userName == "" || password == "" || email == "" {
+			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
+			return
+		}
+		UserID, Username, SessionID, _ := env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
-			Value:   SessionID + "&" + UserID + "&" + Username,
+			Value:   UserID + "&" + SessionID + "&" + Username,
 			Expires: time.Now().Add(24 * time.Hour),
 		})
-
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(UserID + SessionID + Username))
-
+		w.Write([]byte(UserID + "-" + SessionID + "-" + Username))
 	default:
-		fmt.Fprintf(w, "Sorry, only POST methods are supported.")
+		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 	}
 
 }
 
-func Logout(w http.ResponseWriter, r *http.Request) {
+func (env *Env) Logout(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("err")
 	if r.URL.Path != "/logout" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
 	switch r.Method {
 	case "POST":
-
 		c, err := r.Cookie("session_token")
 		if err != nil {
 			if err == http.ErrNoCookie {
@@ -109,27 +110,22 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		res := strings.Split(c.Value, "&")
-
-		db, _ := sql.Open("sqlite3", "./database/forum.db")
-		Forum := database.CreateDatabase(db)
-
-		Forum.RemoveSession(res[2])
-
-		db.Close()
-
+		fmt.Println(res)
+		err = env.Forum.RemoveSession(res[1])
+		if err != nil {
+			log.Fatal(err)
+		}
 		// Set the new token as the users `session_token` cookie
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
 			Value:   "",
 			Expires: time.Now(),
 		})
-
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
 		//w.Write([]byte(UserID + SessionID + Username))
-
 	default:
-		fmt.Fprintf(w, "Sorry, only POST methods are supported.")
+		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
+		return
 	}
-
 }
