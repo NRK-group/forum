@@ -1,35 +1,30 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"forum/database"
 	"forum/handler"
-	"html/template"
 	"log"
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func Home(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("frontend/index.html")
-	if err != nil {
-		http.Error(w, "Internal Error", http.StatusInternalServerError)
-	}
-
-	c, err := r.Cookie("session_token")
-if err != nil {
-	t.Execute(w, "Hello")
-} else {
-t.Execute(w, c.Value)
-}
-}
-
 func main() {
-
-	http.HandleFunc("/", Home)
-	http.HandleFunc("/register", handler.Register)
-	http.HandleFunc("/login", handler.Login)
-	http.HandleFunc("/logout", handler.Logout)
+	db, err := sql.Open("sqlite3", "./database/forum.db")
+	if err != nil {
+		log.Fatal("Database conection error")
+	}
+	Forum := &handler.Env{
+		Forum: database.CreateDatabase(db),
+	}
+	defer db.Close()
+	// Forum.Forum.RemoveSession("")
+	http.HandleFunc("/", Forum.Home)
+	http.HandleFunc("/register", Forum.Register)
+	http.HandleFunc("/login", Forum.Login)
+	http.HandleFunc("/logout", Forum.Logout)
 	cssPath := http.FileServer(http.Dir("./frontend"))
 	http.Handle("/frontend/", http.StripPrefix("/frontend/", cssPath)) // handling the CSS
 	fmt.Printf("Starting server at port 8800\n")
