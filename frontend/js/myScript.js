@@ -39,7 +39,7 @@ fbtn_login.onclick = function(event) {
   }).then(function(text) {
       //text is the server's response
       navbutdivnl.style.display ="none"
-      navbutdivl.style.display ="block"
+      navbutdivl.style.display ="flex"
       lmodal.style.display = "none";
       console.log(text)
       lmodal.style.display = "none";
@@ -110,7 +110,7 @@ fbtn_register.onclick = function(event) {
 
   for (let [k, v] of data.entries()) { console.log(k, v); }
   navbutdivnl.style.display ="none"
-  navbutdivl.style.display ="block"
+  navbutdivl.style.display ="flex"
   rmodal.style.display = "none";
 
 }
@@ -144,6 +144,7 @@ window.onclick = function(event) {
   }
 }
 
+//--------------------------------------------
 
 // logout function
 
@@ -151,7 +152,6 @@ window.onclick = function(event) {
 let logoutBtn = document.getElementById("logoutBtn");
  
 // When the user clicks on logoutBtn that logout the user
-
 logoutBtn.onclick = function() {
 
   let data = new FormData();
@@ -167,23 +167,49 @@ logoutBtn.onclick = function() {
       console.log(text)
   });
 
-  //data.append("Session", );
   navbutdivnl.style.display ="flex"
   navbutdivl.style.display ="none"
 }
 
-
+//--------------------------------------------
 
 // onload
-
 const Onload = (cookie)=> {
 
   session = cookie.split("&")
 
-  if (session) {
+  if (session !== "Hello") {
     navbutdivnl.style.display ="none"
-    navbutdivl.style.display ="block"
+    navbutdivl.style.display ="flex"
   }
   console.log(session)
+}
 
+//--------------------------------------------
+
+
+// Get the post btn
+let postModalBtn = document.getElementById("postModalBtn");
+// Get the post modal
+let pmodal = document.getElementById("postModal");
+
+// Get the <span> element that closes the login modal
+let pspan = document.getElementsByClassName("pclose")[0];
+
+
+// When the user clicks the button, open the login modal 
+// PostBtn.onclick = function(event) {
+//   event.preventDefault();
+  
+// }
+
+// When the user clicks the button, open the login modal 
+postModalBtn.onclick = function() {
+  pmodal.style.display = "block";
+}
+
+
+// When the user clicks on <span> (x), close the login modal
+pspan.onclick = function() {
+  pmodal.style.display = "none";
 }
