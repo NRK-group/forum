@@ -28,11 +28,11 @@ func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass strin
 	if err != nil {
 		return "", "", "", err
 	}
-	sessionID, err := forum.CreateSession(userID.String(), userAgent, ipAddress)
-	if err != nil {
-		return "", "", "", err
-	}
-	return userID.String(), username, sessionID, nil
+	// sessionID, err := forum.CreateSession(userID.String(), userAgent, ipAddress)
+	// if err != nil {
+	// 	return "", "", "", err
+	// }
+	return userID.String(), username, "", nil
 }
 
 // CreateSession
@@ -114,11 +114,12 @@ func (forum *Forum) ReactInComment(postID, commentID, userID string, react int) 
 //  ex. Forum.Delete("User", "userID", "185c6549-caec-4eae-95b0-e16023432ef0")
 func (forum *Forum) Delete(table, where, value string) error {
 	dlt := "DELETE FROM " + table + " WHERE " + where
-	stmt, err1 := forum.DB.Prepare(dlt + " = (?)")
-	fmt.Print(err1)
-	_, err := stmt.Exec(value)
+	stmt, err := forum.DB.Prepare(dlt + " = (?)")
 	if err != nil {
-		fmt.Println("lol")
+		return err
+	}
+	_, err = stmt.Exec(value)
+	if err != nil {
 		return err
 	}
 	// fmt.Print(stmt)
@@ -189,4 +190,19 @@ func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (stri
 	}
 	users.SessionID = sess
 	return users.UserID, users.Username, users.SessionID, nil
+}
+
+//CheckSession
+//is a method of forum that checks the session in the User table and checks if it is match with the sessionID inputed
+func (forum *Forum) CheckSession(sessionId string) bool {
+	rows, err := forum.DB.Query("SELECT sessionID FROM User WHERE sessionID = '" + sessionId + "'")
+	if err != nil {
+		fmt.Print(err)
+		return false
+	}
+	var session string
+	for rows.Next() {
+		rows.Scan(&session)
+	}
+	return session != ""
 }
