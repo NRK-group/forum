@@ -1,8 +1,17 @@
+Html {
+  font-family: Roboto;
+  font-weight: 900;
+}
+
+body {
+  margin: 0;
+}
+
 .Body {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  background: #1a1818;
+  background: #eaeaea;
   height: 100vh;
   width: 100vw;
 }
@@ -11,9 +20,10 @@
   position: absolute;
   width: 18vw;
   height: 95vh;
-  left: 0px;
-  top: 6vh;
-  background: #1b42d1;
+  top: 9vh;
+  background: #ffffff;
+  border-top: 1px solid #eaeaea;
+  border-radius: 5px;
 }
 
 .Menu {
@@ -26,7 +36,7 @@
   height: 167px;
   left: 0px;
   top: 111px;
-  background: #d11b1b;
+  background: #eaeaea;
   padding: 6px;
 }
 
@@ -37,12 +47,11 @@
   left: 0px;
   top: 40px;
   padding: 6px;
-
-  background: #d11b1b;
+  background: #ffffff;
 }
 
 .Comments-section {
-  background: #d11b1b;
+  background: #eaeaea;
   margin-left: 18vw;
   width: 60vw;
   height: 95vh;
@@ -57,7 +66,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 5px 3px;
+  padding: 20px 20px;
 
   width: 54vw;
   min-height: 22vh;
@@ -78,20 +87,20 @@
 .Comment-header {
   width: 53vw;
   height: 6vh;
- /* background: #d1eb07;*/
+  /* background: #d1eb07;*/
 }
 
 .Comment-body {
   width: 53vw;
   min-height: 13vh;
- /* background: #59eb0a; */
+  /* background: #59eb0a; */
 }
 
 .Comment-footer {
   width: 53vw;
   height: 3vh;
   color: #888;
- /* background: #07aeeb; */
+  /* background: #07aeeb; */
 }
 
 .chip {
@@ -120,7 +129,7 @@
 }
 
 .Left-Comment-footer {
-    float: right;
+  float: right;
 }
 
 .Help-box {
@@ -131,98 +140,71 @@
   position: absolute;
   width: 18vw;
   height: 267px;
-  top: 7vh;
-  background: #d11b1b;
+  top: 9vh;
+  background: #ffffff;
   padding: 6px;
   margin-left: 79vw;
+  border-radius: 5px;
 }
 
 .Navbar {
-  position: absolute;
-  height: 6vh;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  width: 100vw;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
   overflow: hidden;
   background: #ffffff;
-  /* Border */
+  z-index: 1;
+  margin-bottom: 50px;
 }
 
-.Navbar-Logo {
-  position: absolute;
-  width: 112px;
-  height: 29.6px;
-  left: 50px;
-  top: 27px;
+.Navbar-logo,
+.Navbar-title,
+.Navbar-buttons {
+  margin: 10px 20px 10px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.Navbar-title {
+  color: #808080;
 }
 
 .Navbar-buttons {
-  display: flex;
-  float: right;
+  justify-content: center;
 }
 
-.Nav-Register-btn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 12px 20px;
-  margin: 4px;
-
-  height: 38px;
-  left: 1204px;
-  top: 23px;
-
-  background: #ac131d;
-  border-radius: 5px;
+.Navbar-logo {
+  margin-left: 100px;
 }
 
-.Nav-Login-btn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 12px 20px;
-  margin: 4px;
-  height: 38px;
-  left: 1333px;
-  top: 23px;
-
-  /* Border */
-  background: #eaeaea;
-  border-radius: 5px;
-}
-
-.Nav-Logout-btn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 12px 20px;
-  margin: 4px;
-  height: 38px;
-  left: 1333px;
-  top: 23px;
-
-  /* Border */
-  background: #eaeaea;
-  border-radius: 5px;
-}
-
+.Nav-Register-btn,
+.Nav-Login-btn,
+.Nav-Logout-btn,
 .Nav-Post-btn {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 12px 20px;
   margin: 4px;
-
   height: 38px;
-  left: 1204px;
-  top: 23px;
-
-  background: #ac131d;
   border-radius: 5px;
 }
 
-.Not_Login{
+.Nav-Register-btn,
+.Nav-Post-btn {
+  border: 1px solid #ac131d;
+  color: #ffffff;
+  background: #ac131d;
+}
+
+.Nav-Login-btn,
+.Nav-Logout-btn {
+  color: #ac131d;
+  border: 1px solid #eaeaea;
+  background: #eaeaea;
+}
+
+.Not_Login {
   display: flex;
 }
 
@@ -230,48 +212,31 @@
   display: none;
 }
 
-.Modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-}
-
-.Pmodal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-}
-
-
+.Modal,
+.Pmodal,
 .Rmodal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
 }
+
 
 /* Modal Content */
 .modal-content {
@@ -306,17 +271,7 @@ textarea {
   border-radius: 8px;
 }
 
-.Form-btn-login {
-  margin-top: 3vh;
-  height: 35px;
-  width: 210px;
-  margin-right: auto;
-  margin-left: auto;
-  border-radius: 8px;
-  background: #ac131d;
-  font-size: large;
-}
-
+.Form-btn-login,
 .Form-btn-register {
   margin-top: 3vh;
   height: 35px;
@@ -326,6 +281,8 @@ textarea {
   border-radius: 8px;
   background: #ac131d;
   font-size: large;
+  color: #ffffff;
+  border: 1px solid #ac131d;
 }
 
 .Form-login-inputBox {
@@ -365,7 +322,8 @@ textarea {
 }
 
 .custom-select select {
-  display: none; /*hide original SELECT element:*/
+  display: none;
+  /*hide original SELECT element:*/
 }
 
 .select-selected {
@@ -391,7 +349,8 @@ textarea {
 }
 
 /*style the items (options), including the selected item:*/
-.select-items div,.select-selected {
+.select-items div,
+.select-selected {
   color: #ffffff;
   padding: 8px 16px;
   border: 1px solid transparent;
@@ -415,6 +374,7 @@ textarea {
   display: none;
 }
 
-.select-items div:hover, .same-as-selected {
+.select-items div:hover,
+.same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
 }
