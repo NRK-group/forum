@@ -91,7 +91,9 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 			return
 		}
-		env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
+		_, _, _, err := env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
+		// fmt.Println(err.Error())
+		w.Write([]byte(err.Error()))
 	default:
 		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 	}
