@@ -24,6 +24,7 @@ func main() {
 	http.HandleFunc("/", Forum.Home)
 	http.HandleFunc("/register", Forum.Register)
 	http.HandleFunc("/login", Forum.Login)
+	http.HandleFunc("/post", Forum.Post)
 	http.HandleFunc("/logout", Forum.Logout)
 	cssPath := http.FileServer(http.Dir("./frontend"))
 	http.Handle("/frontend/", http.StripPrefix("/frontend/", cssPath)) // handling the CSS

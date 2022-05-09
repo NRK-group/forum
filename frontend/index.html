@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../frontend/css/all.css" />
   </head>
 
-  <body class="Body" onload="Onload('{{.}}')">
+  <body class="Body" onload="Onload('{{.Cookie}}')">
     <!-- Navbar -->
     <nav class="Navbar">
       <div class="Navbar-buttons">
@@ -387,7 +387,7 @@
             <form class="Form">
               <div class="Form-post-inputBox">
                 <label for="Categories">Categories:</label>
-                <select id="Categories" name="Categories" class="custom-select">
+                <select id="categories" name="Categories" class="custom-select">
                   <option value="Go">Go</option>
                   <option value="Java">Java</option>
                   <option value="Python">Python</option>
@@ -401,7 +401,7 @@
                 <label>Post</label>
                 <textarea id="post" name="post" rows="4" cols="50"> </textarea>
               </div>
-              <button id="form-btn-login" class="Form-btn-login">Post</button>
+              <button id="form-btn-post" class="Form-btn-post">Post</button>
             </form>
           </center>
         </div>

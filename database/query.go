@@ -207,3 +207,28 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 	}
 	return session != ""
 }
+
+//AllPost
+//is a method of forum that will return all post
+func (forum *Forum) AllPost()[]Post {
+	rows, err := forum.DB.Query("SELECT * FROM Post ")
+	var post Post
+	var posts []Post
+
+	if err != nil {
+		fmt.Print(err)
+		return posts
+	}
+
+	for rows.Next() {
+		var col1, col2, col3, col4, col5 string
+		rows.Scan(&col1, &col2, & col3, & col4, & col5)
+		post=Post{PostID:      col1,
+			UserID:      col2,
+			DateCreated: col3,
+			Content:     col4,
+			Category:    col5}
+		posts =	append(posts, post)
+	}
+	return posts
+}

@@ -17,6 +17,12 @@ let lspan = document.getElementsByClassName("lclose")[0];
 // Get the button that opens that login the user 
 let fbtn_login = document.getElementById("form-btn-login");
 
+// close and reset the login modal
+const Closelogin = ()=> {
+  lmodal.style.display = "none";
+  document.getElementById("userName").value = ""
+  document.getElementById("password").value = ""
+}
 
 // When the user clicks the button, open the login modal 
 fbtn_login.onclick = function (event) {
@@ -41,9 +47,8 @@ fbtn_login.onclick = function (event) {
       //text is the server's response
       navbutdivnl.style.display ="none"
       navbutdivl.style.display ="flex"
-      lmodal.style.display = "none";
+      Closelogin()
       console.log(text)
-      lmodal.style.display = "none";
     });
 
 }
@@ -56,13 +61,13 @@ lbtn.onclick = function () {
 // When the user clicks on login , close the login modal and open the register modal
 rbtnl.onclick = function () {
   rmodal.style.display = "block";
-  lmodal.style.display = "none";
+  Closelogin()
 }
 
 
 // When the user clicks on <span> (x), close the login modal
 lspan.onclick = function () {
-  lmodal.style.display = "none";
+  Closelogin()
 }
 
 //--------------------------------------------
@@ -86,6 +91,12 @@ let fbtn_register = document.getElementById("form-btn-register");
 let navbutdivnl = document.getElementById("Not_Login");
 let navbutdivl = document.getElementById("Login");
 
+const Closeregister = ()=> {
+  document.getElementById("rUserName").value = ""
+  document.getElementById("rPassword").value = ""
+  document.getElementById("rEmail").value = ""
+  rmodal.style.display = "none";
+}
 
 // When the user clicks the button, open the login modal 
 fbtn_register.onclick = function (event) {
@@ -113,7 +124,7 @@ fbtn_register.onclick = function (event) {
   for (let [k, v] of data.entries()) { console.log(k, v); }
   navbutdivnl.style.display ="none"
   navbutdivl.style.display ="flex"
-  rmodal.style.display = "none";
+  Closeregister()
 
 }
 
@@ -125,26 +136,19 @@ rbtn.onclick = function () {
 
 // When the user clicks on login , close the register modal and open the login modal
 lbtnr.onclick = function () {
-  rmodal.style.display = "none";
+  Closeregister()
   lmodal.style.display = "block";
 }
 
 
 // When the user clicks on <span> (x), close the login modal
 rspan.onclick = function () {
-  rmodal.style.display = "none";
+  Closeregister()
 }
 
 
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == lmodal) {
-    lmodal.style.display = "none";
-  } else if (event.target == rmodal) {
-    rmodal.style.display = "none";
-  }
-}
+
 
 //--------------------------------------------
 
@@ -178,20 +182,21 @@ logoutBtn.onclick = function() {
 
 // onload
 const Onload = (cookie)=> {
-
+if (cookie !== ""){
   session = cookie.split("&")
 
-  if (session !== "Hello") {
+  if (session.length > 2) {
     navbutdivnl.style.display ="none"
     navbutdivl.style.display ="flex"
   }
   console.log(session)
 }
+}
 
 //--------------------------------------------
 
 
-// Get the post btn
+// Get the post btn to open the post modal
 let postModalBtn = document.getElementById("postModalBtn");
 // Get the post modal
 let pmodal = document.getElementById("postModal");
@@ -199,12 +204,42 @@ let pmodal = document.getElementById("postModal");
 // Get the <span> element that closes the login modal
 let pspan = document.getElementsByClassName("pclose")[0];
 
+// Get the post btn to post
+let postBtn = document.getElementById("form-btn-post");
 
-// When the user clicks the button, open the login modal 
-// PostBtn.onclick = function(event) {
-//   event.preventDefault();
+// close and reset the post modal
+const Closepost = ()=> {
+  pmodal.style.display = "none";
+  document.getElementById("categories").value = "GO"
+  document.getElementById("title").value = ""
+  document.getElementById("post").value = ""
+}
+
+
+// When the user clicks the button it make a new post 
+ postBtn.onclick = function(event) {
+   event.preventDefault();
+   let data = new FormData();
+   console.log("text")
+   data.append("categories", document.getElementById("categories").value);
+   data.append("title", document.getElementById("title").value);
+   data.append("post", document.getElementById("post").value);
+
+   fetch("http://localhost:8800/post",
+    {
+      method: 'POST',
+      body: data
+    })
+    .then(function (response) {
+      return response.text()
+    }).then(function (text) {
+      //text is the server's response
+      console.log(text)
+      Closepost()
+    });
+
   
-// }
+ }
 
 // When the user clicks the button, open the login modal 
 postModalBtn.onclick = function() {
@@ -213,6 +248,16 @@ postModalBtn.onclick = function() {
 
 
 // When the user clicks on <span> (x), close the login modal
-pspan.onclick = function() {
-  pmodal.style.display = "none";
+pspan.onclick = ()=> Closepost()
+
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == lmodal) {
+    Closelogin()
+  } else if (event.target == rmodal) {
+    Closeregister()
+  } else if (event.target == pmodal) {
+    Closepost()
+  }
 }
