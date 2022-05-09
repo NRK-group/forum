@@ -224,7 +224,7 @@ const Closepost = ()=> {
    data.append("categories", document.getElementById("categories").value);
    data.append("title", document.getElementById("title").value);
    data.append("post", document.getElementById("post").value);
-
+console.log
    fetch("http://localhost:8800/post",
     {
       method: 'POST',
@@ -261,3 +261,4 @@ window.onclick = function (event) {
     Closepost()
   }
 }
+

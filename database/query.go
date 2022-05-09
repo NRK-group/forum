@@ -54,12 +54,12 @@ func (forum *Forum) CreateSession(userID, userAgent, ipAddress string) (string, 
 
 // CreatePost
 // is a method of database that add post in it.
-func (forum *Forum) CreatePost(userID, content, category string) (string, error) {
+func (forum *Forum) CreatePost(userID, content, category, title string) (string, error) {
 	postID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
-		INSERT INTO Post (postID, userID, dateCreated, content, category) values (?, ?, ?, ?, ?)
+		INSERT INTO Post (postID, userID, dateCreated, content, category, title) values (?, ?, ?, ?, ?, ?)
 	`)
-	_, err := stmt.Exec(postID, userID, Date, content, category)
+	_, err := stmt.Exec(postID, userID, Date, content, category, title)
 	if err != nil {
 		return "", err
 	}
@@ -210,7 +210,7 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 
 //AllPost
 //is a method of forum that will return all post
-func (forum *Forum) AllPost()[]Post {
+func (forum *Forum) AllPost(userName string)[]Post {
 	rows, err := forum.DB.Query("SELECT * FROM Post ")
 	var post Post
 	var posts []Post
@@ -221,13 +221,14 @@ func (forum *Forum) AllPost()[]Post {
 	}
 
 	for rows.Next() {
-		var col1, col2, col3, col4, col5 string
-		rows.Scan(&col1, &col2, & col3, & col4, & col5)
+		var col1, col2, col3, col4, col5, col6 string
+		rows.Scan(&col1, &col2, & col3, & col4, & col5, &col6)
 		post=Post{PostID:      col1,
-			UserID:      col2,
-			DateCreated: col3,
-			Content:     col4,
-			Category:    col5}
+			UserID:      userName,
+			DateCreated: col4,
+			Content:     col6,
+			Category:    col4,
+			Title: col3}
 		posts =	append(posts, post)
 	}
 	return posts

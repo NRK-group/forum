@@ -48,10 +48,10 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		page := data{ Cookie: err.Error(), Posts: env.Forum.AllPost()}
+		page := data{ Cookie: err.Error(), Posts: env.Forum.AllPost(co[2])}
 		t.Execute(w, page)
 	} else {
-		page := data{ Cookie: c.Value, Posts: env.Forum.AllPost()}
+		page := data{ Cookie: c.Value, Posts: env.Forum.AllPost(co[2])}
 		t.Execute(w, page)
 	}
 }
@@ -158,6 +158,7 @@ func (env *Env) Post(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
+
 	c, err := r.Cookie("session_token")
 	co := []string{}
 	if strings.Contains(c.String(), "&") {
@@ -182,7 +183,7 @@ func (env *Env) Post(w http.ResponseWriter, r *http.Request) {
 		categories := r.FormValue("categories")
 		title := r.FormValue("title")
 		post := r.FormValue("post")
-		postID, _ := env.Forum.CreatePost(co[0], title+"&"+post, categories)
+		postID, _ := env.Forum.CreatePost(co[0], post, categories, title)
 
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")

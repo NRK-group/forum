@@ -38,196 +38,29 @@
 
   <!-- Comments Section -->
   <div class="Comments-section">
-    <div class="Comment">
+    {{range .Posts}}
+    <div class="Comment" key="{{.PostID}}">
       <div class="Comment-header">
-        <div class="chip">
+        <div class="chip" >
           <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
+          {{.UserID}}
         </div>
       </div>
       <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
+        <h2>{{.Title}}</h2>
+        <p id="Content">
+          {{.Content}}
         </p>
       </div>
       <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
+        <span class="Category"> {{.Category}}</span> 
         <div class="Left-Comment-footer">
           <span class="Category">Java</span>
           <a class="Category">12 Comments</a><span class="Category">Python</span>
         </div>
       </div>
     </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
-    <div class="Comment">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          John Doe
-        </div>
-      </div>
-      <div class="Comment-body">
-        <h2>What is a difference between Java nad JavaScript?</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum
-          vitae etiam lectus amet enim.
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        <div class="Left-Comment-footer">
-          <span class="Category">Java</span> <span class="Category">GO</span><span class="Category">Python</span>
-        </div>
-      </div>
-    </div>
+    {{end}}
   </div>
 
   <div class="Help-box"></div>
@@ -315,7 +148,7 @@
           <form class="Form">
             <div class="Form-post-inputBox">
               <label for="Categories">Categories:</label>
-              <select id="Categories" name="Categories" class="custom-select">
+              <select id="categories" name="Categories" class="custom-select">
                 <option value="Go">Go</option>
                 <option value="Java">Java</option>
                 <option value="Python">Python</option>
