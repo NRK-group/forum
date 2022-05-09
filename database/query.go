@@ -32,6 +32,7 @@ func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass strin
 	// if err != nil {
 	// 	return "", "", "", err
 	// }
+	forum.Update("User", "sessionID", "", "userID", userID.String())
 	return userID.String(), username, "", nil
 }
 
