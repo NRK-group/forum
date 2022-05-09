@@ -31,7 +31,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(c.String(), "&") {
 		co = strings.Split(c.Value, "&")
 	}
-	 fmt.Println(env.Forum.AllPost())
+	
 	if len(co) != 0 {
 		if !(env.Forum.CheckSession(co[1])) {
 			// Set the new token as the users `session_token` cookie
@@ -40,6 +40,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 				Value:   "",
 				Expires: time.Now(),
 			})
+			
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
 		}
@@ -47,7 +48,8 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		t.Execute(w, err.Error())
+		page := data{ Cookie: err.Error(), Posts: env.Forum.AllPost()}
+		t.Execute(w, page)
 	} else {
 		page := data{ Cookie: c.Value, Posts: env.Forum.AllPost()}
 		t.Execute(w, page)
