@@ -210,26 +210,35 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 
 //AllPost
 //is a method of forum that will return all post
-func (forum *Forum) AllPost(userName string)[]Post {
+func (forum *Forum) AllPost() []Post {
 	rows, err := forum.DB.Query("SELECT * FROM Post ")
 	var post Post
 	var posts []Post
-
 	if err != nil {
 		fmt.Print(err)
 		return posts
 	}
-
+	var postID, userID, title, category, dateCreated, content string
 	for rows.Next() {
-		var col1, col2, col3, col4, col5, col6 string
-		rows.Scan(&col1, &col2, & col3, & col4, & col5, &col6)
-		post=Post{PostID:      col1,
-			UserID:      userName,
-			DateCreated: col4,
-			Content:     col6,
-			Category:    col4,
-			Title: col3}
-		posts =	append(posts, post)
+		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &content)
+		post = Post{
+			PostID:      postID,
+			DateCreated: dateCreated,
+			Content:     content,
+			Category:    category,
+			Title:       title,
+		}
+		var username string
+		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
+		if err != nil {
+			fmt.Print(err)
+			return posts
+		}
+		for rows2.Next() {
+			rows2.Scan(&username)
+		}
+		post.UserID = username
+		posts = append([]Post{post}, posts...)
 	}
 	return posts
 }

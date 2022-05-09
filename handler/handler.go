@@ -18,7 +18,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("frontend/index.html")
 
 	type data struct {
-		Cookie   interface{}
+		Cookie interface{}
 		Posts  interface{}
 	}
 
@@ -31,7 +31,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(c.String(), "&") {
 		co = strings.Split(c.Value, "&")
 	}
-	
+
 	if len(co) != 0 {
 		if !(env.Forum.CheckSession(co[1])) {
 			// Set the new token as the users `session_token` cookie
@@ -40,19 +40,26 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 				Value:   "",
 				Expires: time.Now(),
 			})
-			
+
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
 		}
 	}
-	
+
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		page := data{ Cookie: err.Error(), Posts: env.Forum.AllPost(co[2])}
-		t.Execute(w, page)
+		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost()}
+		if err := t.Execute(w, page); err != nil {
+			http.Error(w, "500 Internal error", http.StatusInternalServerError)
+			return
+		}
+
 	} else {
-		page := data{ Cookie: c.Value, Posts: env.Forum.AllPost(co[2])}
-		t.Execute(w, page)
+		page := data{Cookie: c.Value, Posts: env.Forum.AllPost()}
+		if err := t.Execute(w, page); err != nil {
+			http.Error(w, "500 Internal error", http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
@@ -104,7 +111,7 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 		_, _, _, err := env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
 		// fmt.Println(err.Error())
 		if err != nil {
-		w.Write([]byte(err.Error()))
+			w.Write([]byte(err.Error()))
 		}
 	default:
 		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
@@ -178,18 +185,18 @@ func (env *Env) Post(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if err == nil {
-	switch r.Method {
-	case "POST":
-		categories := r.FormValue("categories")
-		title := r.FormValue("title")
-		post := r.FormValue("post")
-		postID, _ := env.Forum.CreatePost(co[0], post, categories, title)
+		switch r.Method {
+		case "POST":
+			categories := r.FormValue("categories")
+			title := r.FormValue("title")
+			post := r.FormValue("post")
+			postID, _ := env.Forum.CreatePost(co[0], post, categories, title)
 
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(postID))
-	default:
-		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-type", "application/text")
+			w.Write([]byte(postID))
+		default:
+			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
+		}
 	}
-} 
 }
