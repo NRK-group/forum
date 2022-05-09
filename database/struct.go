@@ -25,6 +25,7 @@ type Post struct {
 	PostID      string
 	UserID      string
 	DateCreated string
+	Title       string
 	Content     string
 	Category    string
 }

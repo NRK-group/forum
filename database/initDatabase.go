@@ -43,6 +43,7 @@ func initPost(db *sql.DB) {
 	CREATE TABLE IF NOT EXISTS "Post" (
 		"postID"	TEXT UNIQUE NOT NULL,
 		"userID"	TEXT NOT NULL,
+		"title"     TEXT NOT NULL,
 		"category"	TEXT NOT NULL,
 		"dateCreated" TEXT NOT NULL,
 		"content"	TEXT NOT NULL,
