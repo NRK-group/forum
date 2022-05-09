@@ -21,7 +21,23 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c, err := r.Cookie("session_token")
-	// co := strings.Split(c.Value, "&")
+	co := []string{}
+	if strings.Contains(c.String(), "&") {
+		co = strings.Split(c.Value, "&")
+	}
+	// fmt.Println(co)
+	if len(co) != 0 {
+		if !(env.Forum.CheckSession(co[1])) {
+			// Set the new token as the users `session_token` cookie
+			http.SetCookie(w, &http.Cookie{
+				Name:    "session_token",
+				Value:   "",
+				Expires: time.Now(),
+			})
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-type", "application/text")
+		}
+	}
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
 		t.Execute(w, err.Error())
@@ -75,15 +91,7 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 			return
 		}
-		UserID, Username, SessionID, _ := env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
-		http.SetCookie(w, &http.Cookie{
-			Name:    "session_token",
-			Value:   UserID + "&" + SessionID + "&" + Username,
-			Expires: time.Now().Add(24 * time.Hour),
-		})
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(UserID + "-" + SessionID + "-" + Username))
+		env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
 	default:
 		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 	}
@@ -91,7 +99,7 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) Logout(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("err")
+
 	if r.URL.Path != "/logout" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
@@ -124,6 +132,7 @@ func (env *Env) Logout(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
 		//w.Write([]byte(UserID + SessionID + Username))
+		fmt.Println("Logout successful")
 	default:
 		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 		return
