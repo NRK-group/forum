@@ -232,6 +232,7 @@ body {
 
 .Modal,
 .Pmodal,
+.Cmodal,
 .Rmodal {
   display: none;
   /* Hidden by default */

@@ -72,7 +72,20 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		userName := r.FormValue("userName")
 		password := r.FormValue("password")
-		UserID, Username, SessionID, _ := env.Forum.LoginUsers(userName, r.UserAgent(), GetIP(r), password)
+
+		if userName == "" || password == "" {
+			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
+			return
+		}
+
+		UserID, Username, SessionID, err := env.Forum.LoginUsers(userName, r.UserAgent(), GetIP(r), password)
+
+		if err != nil {
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-type", "application/text")
+			w.Write([]byte("0" + err.Error()))
+			return
+		}
 
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
@@ -81,7 +94,7 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
 		})
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
-		w.Write([]byte(UserID + "-" + SessionID + "-" + Username))
+		w.Write([]byte("1" + UserID + "-" + SessionID + "-" + Username))
 	default:
 		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 	}
@@ -111,8 +124,15 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 		_, _, _, err := env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
 		// fmt.Println(err.Error())
 		if err != nil {
-			w.Write([]byte(err.Error()))
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-type", "application/text")
+			w.Write([]byte("0"+err.Error()))
+			return
 		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-type", "application/text")
+		w.Write([]byte("1Register successful"))
 	default:
 		http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 	}
@@ -139,7 +159,6 @@ func (env *Env) Logout(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		res := strings.Split(c.Value, "&")
-		fmt.Println(res)
 		err = env.Forum.RemoveSession(res[1])
 		if err != nil {
 			log.Fatal(err)

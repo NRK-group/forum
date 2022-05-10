@@ -29,12 +29,8 @@ fbtn_login.onclick = function (event) {
   event.preventDefault();
   let data = new FormData();
 
-
   data.append("userName", document.getElementById("userName").value);
   data.append("password", document.getElementById("password").value);
-
-
-  for (let [k, v] of data.entries()) { console.log(k, v); }
 
   fetch("http://localhost:8800/login",
     {
@@ -45,10 +41,14 @@ fbtn_login.onclick = function (event) {
       return response.text()
     }).then(function (text) {
       //text is the server's response
+      if (text[0] === "0") {
+        document.getElementById("login-err").innerText = text.substring(1)
+      } else if (text[0] === "1") {
+        document.getElementById("login-err").innerText = ""
       navbutdivnl.style.display ="none"
       navbutdivl.style.display ="flex"
       Closelogin()
-      console.log(text)
+      }
     });
 
 }
@@ -116,15 +116,18 @@ fbtn_register.onclick = function (event) {
       return response.text()
     }).then(function (text) {
       //text is the server's response
-      console.log(text)
+      if (text[0] === "0") {
+        document.getElementById("register-err").innerText = text.substring(1)
+      } else if (text[0] === "1") {
+        document.getElementById("register-err").innerText =""
+        Closeregister()
+        alert(text.substring(1));
+      }
+      
     });
 
 
 
-  for (let [k, v] of data.entries()) { console.log(k, v); }
-  navbutdivnl.style.display ="none"
-  navbutdivl.style.display ="flex"
-  Closeregister()
 
 }
 
@@ -161,7 +164,6 @@ let logoutBtn = document.getElementById("logoutBtn");
 logoutBtn.onclick = function() {
 
   let data = new FormData();
-  console.log("text")
   fetch("http://localhost:8800/logout",
     {
       method: 'POST',
@@ -171,7 +173,7 @@ logoutBtn.onclick = function() {
       return response.text()
     }).then(function (text) {
       //text is the server's response
-      console.log(text)
+      alert(text);
     });
 
   navbutdivnl.style.display ="flex"
@@ -189,7 +191,6 @@ if (cookie !== ""){
     navbutdivnl.style.display ="none"
     navbutdivl.style.display ="flex"
   }
-  console.log(session)
 }
 }
 
@@ -220,11 +221,10 @@ const Closepost = ()=> {
  postBtn.onclick = function(event) {
    event.preventDefault();
    let data = new FormData();
-   console.log("text")
    data.append("categories", document.getElementById("categories").value);
    data.append("title", document.getElementById("title").value);
    data.append("post", document.getElementById("post").value);
-console.log
+
    fetch("http://localhost:8800/post",
     {
       method: 'POST',
@@ -235,6 +235,7 @@ console.log
     }).then(function (text) {
       //text is the server's response
       console.log(text)
+      window.location.reload();
       Closepost()
     });
 
@@ -251,6 +252,60 @@ postModalBtn.onclick = function() {
 pspan.onclick = ()=> Closepost()
 
 
+//--------------------------------------------
+let postid = ""; 
+
+// Get the comment modal
+let cmodal = document.getElementById("commentModal");
+
+// Get the <span> element that closes the comment modal
+let cspan = document.getElementsByClassName("cclose")[0];
+
+// Get the post btn to comment
+let commentBtn = document.getElementById("form-btn-comment");
+
+// close and reset the comment modal
+const Closecomment = ()=> {
+  cmodal.style.display = "none";
+  document.getElementById("comment").value = ""
+  postid =""
+}
+
+
+// When the user clicks the button to open the comment modal 
+const Comment = function(postID) {
+   cmodal.style.display = "block";
+   postid = postID  
+ }
+
+ // When the user clicks the button it make a new post 
+ postBtn.onclick = function(event) {
+  event.preventDefault();
+  let data = new FormData();
+  data.append("comment", document.getElementById("comment").value);
+  data.append("postID", postid);
+  postid =""
+   
+   fetch("http://localhost:8800/comment",
+    {
+      method: 'POST',
+      body: data
+    })
+    .then(function (response) {
+      return response.text()
+    }).then(function (text) {
+      //text is the server's response
+      console.log(text)
+      //window.location.reload();
+      Closecomment()
+    });
+
+ }
+
+// When the user clicks on <span> (x), close the comment modal
+cspan.onclick = ()=> Closecomment()
+
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == lmodal) {
@@ -259,6 +314,8 @@ window.onclick = function (event) {
     Closeregister()
   } else if (event.target == pmodal) {
     Closepost()
+  }  else if (event.target == cmodal) {
+    Closecomment()
   }
 }
 
