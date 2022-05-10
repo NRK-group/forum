@@ -36,12 +36,19 @@
     </div>
   </div>
 
+  <!-- Post Filter section -->
+  <div class="post-filter">
+    <span class="Category">New</span>
+    <span class="Category">Top</span>
+    <span class="Category">Hot</span>
+  </div>
+
   <!-- Comments Section -->
   <div class="Comments-section">
     {{range .Posts}}
     <div class="Comment" key="{{.PostID}}">
       <div class="Comment-header">
-        <div class="chip" >
+        <div class="chip">
           <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
           {{.UserID}}
         </div>
@@ -53,17 +60,23 @@
         </p>
       </div>
       <div class="Comment-footer">
-        <span class="Category"> {{.Category}}</span> 
+        <span class="Category"> {{.Category}}</span>
         <div class="Left-Comment-footer">
-          <span class="Category">Java</span>
-          <a class="Category">12 Comments</a><span class="Category">Python</span>
+          <span class="Category">like</span>
+          <span class="Category">dislike</span>
+          <a class="Category">12 Comments</a>
         </div>
       </div>
     </div>
     {{end}}
   </div>
 
-  <div class="Help-box"></div>
+  <div class="Help-box">
+    <!-- <div>Featured links</div>
+    <div><a class="link" href="http://localhost:8800/">http://localhost:8800</a></div>
+    <div><a class="link" href="https://stackoverflow.com/questions">https://stackoverflow.com/questions</a></div>
+    <div><a class="link" href="https://git.learn.01founders.co">https://git.learn.01founders.co</a></div> -->
+  </div>
 
   <!-- The Login Modal -->
   <div id="loginModal" class="Modal">

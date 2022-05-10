@@ -19,12 +19,24 @@ body {
 .Sidebar {
   position: absolute;
   width: 18vw;
-  height: 95vh;
+  height: 105vh;
   top: 9vh;
   background: #ffffff;
   border-top: 1px solid #eaeaea;
   border-radius: 5px;
 }
+
+.post-filter {
+  display: flex;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 18vw;
+  top: 9vh;
+  width: 14vw;
+  margin-left: 20vw;
+  padding: 20px 20px;
+}
+
 
 .Menu {
   /* Auto layout */
@@ -33,10 +45,9 @@ body {
   align-items: flex-start;
   position: absolute;
   width: 14vw;
-  height: 167px;
   left: 0px;
   top: 111px;
-  background: #eaeaea;
+  border-bottom: 5px solid #eaeaea;
   padding: 6px;
 }
 
@@ -55,7 +66,7 @@ body {
   margin-left: 18vw;
   width: 60vw;
   height: 95vh;
-  top: 6vh;
+  top: 15vh;
   flex-direction: column;
   align-items: flex-start;
   position: absolute;
@@ -130,6 +141,7 @@ body {
 
 .Left-Comment-footer {
   float: right;
+  margin-right: 14px;
 }
 
 .Help-box {
@@ -145,6 +157,11 @@ body {
   padding: 6px;
   margin-left: 79vw;
   border-radius: 5px;
+  /* padding: 30px 10px 10px 10px; */
+}
+
+.link {
+  color: #1682FD
 }
 
 .Navbar {
@@ -175,6 +192,7 @@ body {
 
 .Navbar-logo {
   margin-left: 100px;
+  color: #ac131d;
 }
 
 .Nav-Register-btn,
