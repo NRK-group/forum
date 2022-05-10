@@ -128,6 +128,7 @@ func (forum *Forum) Delete(table, where, value string) error {
 }
 
 // RemoveSession
+// is method of forum that removes the session based on the sessionID
 func (forum *Forum) RemoveSession(sessionID string) error {
 	err := forum.Update("User", "sessionID", "", "sessionID", sessionID)
 	if err != nil {
@@ -157,6 +158,9 @@ func (forum *Forum) Update(table, set, to, where, id string) error {
 
 // Start of the Select query
 
+//LoginUser
+//is method of forum that checks the database if the login details match the credential
+// and allow them to login if their is a match credentials
 func (forum *Forum) LoginUsers(userName, userAgent, ipAddress, pas string) (string, string, string, error) {
 	var users User
 	rows, err := forum.DB.Query("SELECT * FROM User WHERE username = '" + userName + "'")
@@ -210,7 +214,7 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 
 //AllPost
 //is a method of forum that will return all post
-func (forum *Forum) AllPost() []Post {
+func (forum *Forum) AllPost(filter string) []Post {
 	rows, err := forum.DB.Query("SELECT * FROM Post ")
 	var post Post
 	var posts []Post
@@ -238,7 +242,77 @@ func (forum *Forum) AllPost() []Post {
 			rows2.Scan(&username)
 		}
 		post.UserID = username
-		posts = append([]Post{post}, posts...)
+		if filter == "old" {
+			posts = append(posts, post)
+		} else {
+			posts = append([]Post{post}, posts...)
+		}
+
 	}
 	return posts
+}
+
+//YourPost
+//is a method of forum that return all the post base on the userID
+func (forum *Forum) YourPost(filter, uID string) []Post {
+	rows, err := forum.DB.Query("SELECT * FROM Post WHERE userID = '" + uID + "'")
+	var post Post
+	var posts []Post
+	if err != nil {
+		fmt.Print(err)
+		return posts
+	}
+	var postID, userID, title, category, dateCreated, content string
+	for rows.Next() {
+		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &content)
+		post = Post{
+			PostID:      postID,
+			DateCreated: dateCreated,
+			Content:     content,
+			Category:    category,
+			Title:       title,
+		}
+		if filter == "old" {
+			posts = append(posts, post)
+		} else {
+			posts = append([]Post{post}, posts...)
+		}
+
+	}
+	return posts
+}
+
+//Get Comments
+//is a method of forum that return all the comment with that specific postID
+func (forum *Forum) GetComments(pID string) []Comment {
+	rows, err := forum.DB.Query("SELECT * FROM comment WHERE postID = '" + pID + "'")
+	var comment Comment
+	var comments []Comment
+	if err != nil {
+		fmt.Print(err)
+		return comments
+	}
+	var commentID, postID, userID, dateCreated, content string
+	for rows.Next() {
+		rows.Scan(&commentID, &postID, &userID, &dateCreated, &content)
+		comment = Comment{
+			CommentID:   commentID,
+			PostID:      postID,
+			UserID:      userID,
+			DateCreated: dateCreated,
+			Content:     content,
+		}
+		var username string
+		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
+		if err != nil {
+			fmt.Print(err)
+			return comments
+		}
+		for rows2.Next() {
+			rows2.Scan(&username)
+		}
+		comment.UserID = username
+		comments = append([]Comment{comment}, comments...)
+	}
+	return comments
 }
