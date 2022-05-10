@@ -48,14 +48,14 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost()}
+		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost("new")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
 		}
 
 	} else {
-		page := data{Cookie: c.Value, Posts: env.Forum.AllPost()}
+		page := data{Cookie: c.Value, Posts: env.Forum.AllPost("new")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
@@ -191,6 +191,46 @@ func (env *Env) Post(w http.ResponseWriter, r *http.Request) {
 			title := r.FormValue("title")
 			post := r.FormValue("post")
 			postID, _ := env.Forum.CreatePost(co[0], post, categories, title)
+
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-type", "application/text")
+			w.Write([]byte(postID))
+		default:
+			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
+		}
+	}
+}
+
+func (env *Env) Comment(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/comment" {
+		http.Error(w, "404 not found.", http.StatusNotFound)
+		return
+	}
+
+	c, err := r.Cookie("session_token")
+	co := []string{}
+	if strings.Contains(c.String(), "&") {
+		co = strings.Split(c.Value, "&")
+	}
+	if len(co) != 0 {
+		if !(env.Forum.CheckSession(co[1])) {
+			// Set the new token as the users `session_token` cookie
+			http.SetCookie(w, &http.Cookie{
+				Name:    "session_token",
+				Value:   "",
+				Expires: time.Now(),
+			})
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set("Content-type", "application/text")
+			w.Write([]byte("Error - You are not sign in"))
+		}
+	}
+	if err == nil {
+		switch r.Method {
+		case "POST":
+			content := r.FormValue("comment")
+			pID := r.FormValue("postID")
+			postID, _ := env.Forum.CreateComment(co[0], pID, content)
 
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
