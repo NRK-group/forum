@@ -48,14 +48,14 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost("new")}
+		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost("all")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
 		}
 
 	} else {
-		page := data{Cookie: c.Value, Posts: env.Forum.AllPost("new")}
+		page := data{Cookie: c.Value, Posts: env.Forum.AllPost("all")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
