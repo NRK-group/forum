@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"forum/password"
+	"strconv"
 	"strings"
 	"time"
 
@@ -83,6 +84,7 @@ func (forum *Forum) CreateComment(userID, postID, content string) (string, error
 
 // ReactInPost
 // is a method of database that add reaction in the post in it.
+// Ex. Forum.Forum.ReactInPost("b081d711-aad2-4f90-acea-2f2842e28512", "b53124c2-39f0-4f10-8e02-b7244b406b86", 1)
 func (forum *Forum) ReactInPost(postID, userID string, react int) (string, error) {
 	reactionID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
@@ -213,6 +215,64 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 	return session != ""
 }
 
+//CheckReactInPost
+func (forum *Forum) CheckReactInPost(pID, uID string) (string, bool) {
+	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE postID = '" + pID + "' AND userID = '" + uID + "'")
+	if err != nil {
+		fmt.Print(err)
+		return "", false
+	}
+	var reactionID, postID, commentID, userID string
+	var react int
+	for rows.Next() {
+		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+	}
+	return reactionID, reactionID != ""
+}
+
+//UpdatePostReaction
+//	Ex. Forum.Forum.UpdatePostReaction("b081d711-aad2-4f90-acea-2f2842e28512", "b53124c2-39f0-4f10-8e02-b7244b406b86", "-1")
+func (forum *Forum) UpdatePostReaction(pID, uID, value string) {
+	rID, ok := forum.CheckReactInPost(pID, uID)
+	fmt.Print(rID, ok)
+	if !(ok) {
+		i, _ := strconv.Atoi(value)
+		forum.ReactInPost(pID, uID, i)
+	} else {
+		err := forum.Update("Reaction", "react", value, "reactionID", rID)
+		fmt.Print(err)
+	}
+}
+
+//CheckReactInPost
+func (forum *Forum) CheckReactInComment(cID, uID string) (string, bool) {
+	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE commentID = '" + cID + "' AND userID = '" + uID + "'")
+	if err != nil {
+		fmt.Print(err)
+		return "", false
+	}
+	var reactionID, postID, commentID, userID string
+	var react int
+	for rows.Next() {
+		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+	}
+	return reactionID, reactionID != ""
+}
+
+//UpdatePostReaction
+//	Ex. Forum.Forum.UpdateCommentReaction("98e63b80-d1de-40c2-b4c7-988249c5c60b", "c3dd7cc7-46a1-4d57-b6fb-378f0741d461", "b53124c2-39f0-4f10-8e02-b7244b406b86", "1")
+func (forum *Forum) UpdateCommentReaction(cID, pID, uID, value string) {
+	rID, ok := forum.CheckReactInComment(cID, uID)
+	fmt.Print(rID, ok)
+	if !(ok) {
+		i, _ := strconv.Atoi(value)
+		forum.ReactInComment(pID, cID, uID, i)
+	} else {
+		err := forum.Update("Reaction", "react", value, "reactionID", rID)
+		fmt.Print(err)
+	}
+}
+
 //AllPost
 //is a method of forum that will return all post
 func (forum *Forum) AllPost(filter string) []Post {
@@ -327,4 +387,68 @@ func (forum *Forum) GetComments(pID string) []Comment {
 		comments = append([]Comment{comment}, comments...)
 	}
 	return comments
+}
+
+func (forum *Forum) GetReactionsInPost(pID string) []Reaction {
+	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE postID = '" + pID + "' AND commentID = '" + "" + "'")
+	var reaction Reaction
+	var reactions []Reaction
+	if err != nil {
+		fmt.Print(err)
+		return reactions
+	}
+	var reactionID, postID, commentID, userID string
+	var react, likes, dislikes int
+	for rows.Next() {
+		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+		reaction = Reaction{
+			ReactionID: reactionID,
+			PostID:     postID,
+			CommentID:  commentID,
+			UserID:     userID,
+			React:      react,
+		}
+		if react == 1 {
+			likes++
+		}
+		if react == -1 {
+			dislikes++
+		}
+		reaction.Likes = likes
+		reaction.Dislikes = dislikes
+		reactions = append(reactions, reaction)
+	}
+	return reactions
+}
+
+func (forum *Forum) GetReactionsInComment(cID string) []Reaction {
+	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE commentID = '" + cID + "'")
+	var reaction Reaction
+	var reactions []Reaction
+	if err != nil {
+		fmt.Print(err)
+		return reactions
+	}
+	var reactionID, postID, commentID, userID string
+	var react, likes, dislikes int
+	for rows.Next() {
+		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+		reaction = Reaction{
+			ReactionID: reactionID,
+			PostID:     postID,
+			CommentID:  commentID,
+			UserID:     userID,
+			React:      react,
+		}
+		if react == 1 {
+			likes++
+		}
+		if react == -1 {
+			dislikes++
+		}
+		reaction.Likes = likes
+		reaction.Dislikes = dislikes
+		reactions = append(reactions, reaction)
+	}
+	return reactions
 }
