@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"forum/password"
+	"strings"
 	"time"
 
 	uuid "github.com/satori/go.uuid"
@@ -231,6 +232,7 @@ func (forum *Forum) AllPost(filter string) []Post {
 			Content:     content,
 			Category:    category,
 			Title:       title,
+			Comments:    forum.GetComments(postID),
 		}
 		var username string
 		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
@@ -242,12 +244,22 @@ func (forum *Forum) AllPost(filter string) []Post {
 			rows2.Scan(&username)
 		}
 		post.UserID = username
-		if filter == "old" {
-			posts = append(posts, post)
-		} else {
+		switch filter {
+		case "go":
+			if strings.Contains(category, "go") {
+				posts = append([]Post{post}, posts...)
+			}
+		case "javascript":
+			if strings.Contains(category, "javascript") {
+				posts = append([]Post{post}, posts...)
+			}
+		case "rust":
+			if strings.Contains(category, "rust") {
+				posts = append([]Post{post}, posts...)
+			}
+		default:
 			posts = append([]Post{post}, posts...)
 		}
-
 	}
 	return posts
 }
@@ -285,7 +297,7 @@ func (forum *Forum) YourPost(filter, uID string) []Post {
 //Get Comments
 //is a method of forum that return all the comment with that specific postID
 func (forum *Forum) GetComments(pID string) []Comment {
-	rows, err := forum.DB.Query("SELECT * FROM comment WHERE postID = '" + pID + "'")
+	rows, err := forum.DB.Query("SELECT * FROM Comment WHERE postID = '" + pID + "'")
 	var comment Comment
 	var comments []Comment
 	if err != nil {

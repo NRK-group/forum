@@ -18,7 +18,7 @@ let lspan = document.getElementsByClassName("lclose")[0];
 let fbtn_login = document.getElementById("form-btn-login");
 
 // close and reset the login modal
-const Closelogin = ()=> {
+const Closelogin = () => {
   lmodal.style.display = "none";
   document.getElementById("userName").value = ""
   document.getElementById("password").value = ""
@@ -45,9 +45,9 @@ fbtn_login.onclick = function (event) {
         document.getElementById("login-err").innerText = text.substring(1)
       } else if (text[0] === "1") {
         document.getElementById("login-err").innerText = ""
-      navbutdivnl.style.display ="none"
-      navbutdivl.style.display ="flex"
-      Closelogin()
+        navbutdivnl.style.display = "none"
+        navbutdivl.style.display = "flex"
+        Closelogin()
       }
     });
 
@@ -91,7 +91,7 @@ let fbtn_register = document.getElementById("form-btn-register");
 let navbutdivnl = document.getElementById("Not_Login");
 let navbutdivl = document.getElementById("Login");
 
-const Closeregister = ()=> {
+const Closeregister = () => {
   document.getElementById("rUserName").value = ""
   document.getElementById("rPassword").value = ""
   document.getElementById("rEmail").value = ""
@@ -119,11 +119,11 @@ fbtn_register.onclick = function (event) {
       if (text[0] === "0") {
         document.getElementById("register-err").innerText = text.substring(1)
       } else if (text[0] === "1") {
-        document.getElementById("register-err").innerText =""
+        document.getElementById("register-err").innerText = ""
         Closeregister()
         alert(text.substring(1));
       }
-      
+
     });
 
 
@@ -161,7 +161,7 @@ rspan.onclick = function () {
 let logoutBtn = document.getElementById("logoutBtn");
 
 // When the user clicks on logoutBtn that logout the user
-logoutBtn.onclick = function() {
+logoutBtn.onclick = function () {
 
   let data = new FormData();
   fetch("http://localhost:8800/logout",
@@ -176,22 +176,22 @@ logoutBtn.onclick = function() {
       alert(text);
     });
 
-  navbutdivnl.style.display ="flex"
-  navbutdivl.style.display ="none"
+  navbutdivnl.style.display = "flex"
+  navbutdivl.style.display = "none"
 }
 
 //--------------------------------------------
 
 // onload
-const Onload = (cookie)=> {
-if (cookie !== ""){
-  session = cookie.split("&")
+const Onload = (cookie) => {
+  if (cookie !== "") {
+    session = cookie.split("&")
 
-  if (session.length > 2) {
-    navbutdivnl.style.display ="none"
-    navbutdivl.style.display ="flex"
+    if (session.length > 2) {
+      navbutdivnl.style.display = "none"
+      navbutdivl.style.display = "flex"
+    }
   }
-}
 }
 
 //--------------------------------------------
@@ -209,7 +209,7 @@ let pspan = document.getElementsByClassName("pclose")[0];
 let postBtn = document.getElementById("form-btn-post");
 
 // close and reset the post modal
-const Closepost = ()=> {
+const Closepost = () => {
   pmodal.style.display = "none";
   document.getElementById("categories").value = "GO"
   document.getElementById("title").value = ""
@@ -218,14 +218,15 @@ const Closepost = ()=> {
 
 
 // When the user clicks the button it make a new post 
- postBtn.onclick = function(event) {
-   event.preventDefault();
-   let data = new FormData();
-   data.append("categories", document.getElementById("categories").value);
-   data.append("title", document.getElementById("title").value);
-   data.append("post", document.getElementById("post").value);
+postBtn.onclick = function (event) {
+  event.preventDefault();
+  console.log("dfgf")
+  let data = new FormData();
+  data.append("categories", document.getElementById("categories").value);
+  data.append("title", document.getElementById("title").value);
+  data.append("post", document.getElementById("post").value);
 
-   fetch("http://localhost:8800/post",
+  fetch("http://localhost:8800/post",
     {
       method: 'POST',
       body: data
@@ -239,21 +240,21 @@ const Closepost = ()=> {
       Closepost()
     });
 
-  
- }
+
+}
 
 // When the user clicks the button, open the login modal 
-postModalBtn.onclick = function() {
+postModalBtn.onclick = function () {
   pmodal.style.display = "block";
 }
 
 
 // When the user clicks on <span> (x), close the login modal
-pspan.onclick = ()=> Closepost()
+pspan.onclick = () => Closepost()
 
 
 //--------------------------------------------
-let postid = ""; 
+let postid = "";
 
 // Get the comment modal
 let cmodal = document.getElementById("commentModal");
@@ -265,10 +266,10 @@ let cspan = document.getElementsByClassName("cclose")[0];
 let commentBtn = document.getElementById("form-btn-comment");
 
 // close and reset the comment modal
-const Closecomment = ()=> {
+const Closecomment = () => {
   cmodal.style.display = "none";
   document.getElementById("comment").value = ""
-  postid =""
+  postid = ""
 }
 
 
@@ -311,9 +312,9 @@ window.onclick = function(event) {
   let data = new FormData();
   data.append("comment", document.getElementById("comment").value);
   data.append("postID", postid);
-  postid =""
-   
-   fetch("http://localhost:8800/comment",
+  postid = ""
+
+  fetch("http://localhost:8800/comment",
     {
       method: 'POST',
       body: data
@@ -329,7 +330,7 @@ window.onclick = function(event) {
  */
 
 // When the user clicks on <span> (x), close the comment modal
-cspan.onclick = ()=> Closecomment()
+cspan.onclick = () => Closecomment()
 
 
 // When the user clicks anywhere outside of the modal, close it
@@ -340,7 +341,7 @@ window.onclick = function (event) {
     Closeregister()
   } else if (event.target == pmodal) {
     Closepost()
-  }  else if (event.target == cmodal) {
+  } else if (event.target == cmodal) {
     Closecomment()
   }
 }

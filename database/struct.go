@@ -28,6 +28,7 @@ type Post struct {
 	Title       string
 	Content     string
 	Category    string
+	Comments     []Comment
 }
 
 type Comment struct {
