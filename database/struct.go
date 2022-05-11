@@ -28,7 +28,8 @@ type Post struct {
 	Title       string
 	Content     string
 	Category    string
-	Comments     []Comment
+	Comments    []Comment
+	Reaction    Reaction
 }
 
 type Comment struct {
@@ -37,6 +38,7 @@ type Comment struct {
 	PostID      string
 	DateCreated string
 	Content     string
+	Reaction    Reaction
 }
 
 type Reaction struct {
@@ -45,4 +47,6 @@ type Reaction struct {
 	CommentID  string
 	UserID     string
 	React      int
+	Likes      int
+	Dislikes   int
 }
