@@ -225,7 +225,7 @@ func (env *Env) Comment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
+fmt.Println("teee")
 	c, err := r.Cookie("session_token")
 	co := []string{}
 	if strings.Contains(c.String(), "&") {
