@@ -305,6 +305,7 @@ func (forum *Forum) AllPost(filter string) []Post {
 			Title:        title,
 			Comments:     forum.GetComments(postID),
 			NumOfComment: len(forum.GetComments(postID)),
+			Reaction:     forum.GetReactionsInPost(postID),
 		}
 		var username string
 		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
@@ -333,6 +334,7 @@ func (forum *Forum) AllPost(filter string) []Post {
 			posts = append([]Post{post}, posts...)
 		}
 	}
+
 	return posts
 }
 
@@ -401,22 +403,21 @@ func (forum *Forum) GetComments(pID string) []Comment {
 	return comments
 }
 
-func (forum *Forum) GetReactionsInPost(pID string) []Reaction {
-	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE postID = '" + pID + "' AND commentID = '" + "" + "'")
+func (forum *Forum) GetReactionsInPost(pID string) Reaction {
+	rows, err := forum.DB.Query("SELECT reactionID, postID, userID, react FROM Reaction WHERE postID = '" + pID + "'")
 	var reaction Reaction
-	var reactions []Reaction
+	// var reactions []Reaction
 	if err != nil {
 		fmt.Print(err)
-		return reactions
+		return reaction
 	}
-	var reactionID, postID, commentID, userID string
+	var reactionID, postID, userID string
 	var react, likes, dislikes int
 	for rows.Next() {
-		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+		rows.Scan(&reactionID, &postID, &userID, &react)
 		reaction = Reaction{
 			ReactionID: reactionID,
 			PostID:     postID,
-			CommentID:  commentID,
 			UserID:     userID,
 			React:      react,
 		}
@@ -428,18 +429,17 @@ func (forum *Forum) GetReactionsInPost(pID string) []Reaction {
 		}
 		reaction.Likes = likes
 		reaction.Dislikes = dislikes
-		reactions = append(reactions, reaction)
+		// reactions = append(reactions, reaction)
 	}
-	return reactions
+	return reaction
 }
 
-func (forum *Forum) GetReactionsInComment(cID string) []Reaction {
+func (forum *Forum) GetReactionsInComment(cID string) Reaction {
 	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE commentID = '" + cID + "'")
 	var reaction Reaction
-	var reactions []Reaction
 	if err != nil {
 		fmt.Print(err)
-		return reactions
+		return reaction
 	}
 	var reactionID, postID, commentID, userID string
 	var react, likes, dislikes int
@@ -460,7 +460,6 @@ func (forum *Forum) GetReactionsInComment(cID string) []Reaction {
 		}
 		reaction.Likes = likes
 		reaction.Dislikes = dislikes
-		reactions = append(reactions, reaction)
 	}
-	return reactions
+	return reaction
 }
