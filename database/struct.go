@@ -22,14 +22,15 @@ type Session struct {
 	LoginTime string
 }
 type Post struct {
-	PostID      string
-	UserID      string
-	DateCreated string
-	Title       string
-	Content     string
-	Category    string
-	Comments    []Comment
-	Reaction    Reaction
+	PostID       string
+	UserID       string
+	DateCreated  string
+	Title        string
+	Content      string
+	Category     string
+	NumOfComment int
+	Comments     []Comment
+	Reaction     Reaction
 }
 
 type Comment struct {
