@@ -16,21 +16,20 @@ type Env struct {
 
 func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("frontend/index.html")
-	
+
 	type data struct {
 		Cookie interface{}
 		Posts  interface{}
 	}
-	filter := r.FormValue("filter")
 
+	filter := r.FormValue("filter")
+	content := r.FormValue("comment")
+	postID := r.FormValue("postID")
 
 	if err != nil {
 		http.Error(w, "500 Internal error", http.StatusInternalServerError)
 		return
 	}
-
-	
-	
 
 	c, err := r.Cookie("session_token")
 	co := []string{}
@@ -51,6 +50,11 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-type", "application/text")
 		}
 	}
+	if content != "" {
+	
+		env.Forum.CreateComment(co[0], postID, content)
+
+	}
 
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
@@ -61,8 +65,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		}
 
 	} else {
-	
-	
+
 		page := data{Cookie: c.Value, Posts: env.Forum.AllPost(filter)}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
@@ -268,6 +271,3 @@ func (env *Env) Comment(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
-
-		

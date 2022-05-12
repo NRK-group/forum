@@ -143,6 +143,14 @@ body {
   margin-right: 14px;
 }
 
+.Comment-box {
+  border-color: #000;
+  min-width: 50vw;
+border: 1px solid black;
+padding: 9px;
+
+}
+
 .Help-box {
   /* Auto layout */
   display: flex;
@@ -278,6 +286,25 @@ body {
 .Form {
   display: flex;
   flex-direction: column;
+}
+
+
+.Form_comment {
+  display: flex;
+  flex-direction: column;
+}
+
+input[name="radio-for-required-checkboxes"] {
+  position: absolute;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-appearance: none;
+  pointer-events: none;
+  border: none;
+  background: none;
 }
 
 input {

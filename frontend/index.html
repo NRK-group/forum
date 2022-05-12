@@ -99,10 +99,33 @@
     </div>
     <div class="dropdown">
       <div id='{{.PostID}}' class="dropdown-content">
+      <div class="Comment">
       
+  
+        <form class="Form_comment" method="POST" action="/" id="Form-comment">
+          <div class="Form-comment-textarea">
+            <textarea id="comment" name="comment" rows="10" cols="50"> </textarea>
+          </div>
+          <button type="submit" value='{{.PostID}}' name="postID" class="form-btn-comment">Comment</button>
+        </form>
+    
+        <br />
+        </center>
+        {{range .Comments}}
+        <div class="Comment-box">
+          <div class="chip">
+            <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
+            {{.UserID}}
+          </div>
+          <p>
+            {{.Content}}
+          </p>
+        </div>
+        <br />
+        {{end}}
+      </div>
       </div>
     </div>
-    
     {{end}}
   </div>
 
@@ -200,14 +223,13 @@
           <form class="Form">
             <div class="Form-post-inputBox">
               <label for="Categories">Categories:</label>
-              <select id="categories" name="Categories" class="custom-select">
-                <option value="Go">Go</option>
-                <option value="Java">Java</option>
-                <option value="Python">Python</option>
-              </select>
+              <span><input type="checkbox" name="option[]" value="javascript"> javascript </input></span>
+              <span><input type="checkbox" name="option[]" value="go"/> go </input></span>
+              <span> <input type="checkbox" name="option[]" value="rust"/> rust </input></span>
+             </div>
               <br />
               <label> Title</label>
-              <input id="title" name="title" />
+              <input id="title" name="title" required />
             </div>
             <br />
             <div class="Form-post-textarea">
@@ -221,31 +243,8 @@
     </div>
   </div>
 
-
-  <!-- The Comment Modal -->
-  <div id="commentModal" class="Cmodal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="cclose">&times;</span>
-      <h1>Comment</h1>
-      <div>
-        <center>
-          <br /><br />
-          <form class="Form">
-            <br />
-            <div class="Form-comment-textarea">
-              <label>Comment</label>
-              <textarea id="comment" name="comment" rows="4" cols="50"> </textarea>
-            </div>
-            <button id="form-btn-comment" class="form-btn-comment">Post</button>
-          </form>
-        </center>
-      </div>
-    </div>
-  </div>
-
 </body>
 
-<script src="../frontend/js/myScript.js" onload="console.log('{{.Posts}}')"></script>
+<script src="../frontend/js/myScript.js" ></script>
 
 </html>

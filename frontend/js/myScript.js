@@ -48,6 +48,7 @@ fbtn_login.onclick = function (event) {
         navbutdivnl.style.display = "none"
         navbutdivl.style.display = "flex"
         Closelogin()
+        window.location.reload();
       }
     });
 
@@ -125,10 +126,6 @@ fbtn_register.onclick = function (event) {
       }
 
     });
-
-
-
-
 }
 
 
@@ -148,9 +145,6 @@ lbtnr.onclick = function () {
 rspan.onclick = function () {
   Closeregister()
 }
-
-
-
 
 
 //--------------------------------------------
@@ -174,6 +168,7 @@ logoutBtn.onclick = function () {
     }).then(function (text) {
       //text is the server's response
       alert(text);
+      window.location.reload();
     });
 
   navbutdivnl.style.display = "flex"
@@ -190,6 +185,9 @@ const Onload = (cookie) => {
     if (session.length > 2) {
       navbutdivnl.style.display = "none"
       navbutdivl.style.display = "flex"
+      document.getElementById("Form-comment").style.display ="flex"
+    } else {
+      document.getElementById("Form-comment").style.display = "none"
     }
   }
 }
@@ -220,9 +218,23 @@ const Closepost = () => {
 // When the user clicks the button it make a new post 
 postBtn.onclick = function (event) {
   event.preventDefault();
-  
   let data = new FormData();
-  data.append("categories", document.getElementById("categories").value);
+let flag = false;
+  let inputs = document.querySelectorAll('[name="option[]"]')
+  let categories = "";
+      for(let i = inputs.length-1; i >= 0; --i) {
+          if (inputs[i].checked) {
+            categories = categories + inputs[i].value
+            flag = true;
+          } 
+      }
+     
+
+  if (flag) {
+    if (document.getElementById("title").value === "") {
+      alert("You need title ")
+    } else {
+  data.append("categories", categories);
   data.append("title", document.getElementById("title").value);
   data.append("post", document.getElementById("post").value);
 
@@ -239,7 +251,11 @@ postBtn.onclick = function (event) {
       window.location.reload();
       Closepost()
     });
-
+  }
+}
+   else {
+    alert("You much pick one of the categories")
+  }
 
 }
 
@@ -254,24 +270,8 @@ pspan.onclick = () => Closepost()
 
 
 //--------------------------------------------
-let postid = "";
 
-// Get the comment modal
-let cmodal = document.getElementById("commentModal");
-
-// Get the <span> element that closes the comment modal
-let cspan = document.getElementsByClassName("cclose")[0];
-
-// Get the post btn to comment
-let commentBtn = document.getElementById("form-btn-comment");
-
-// close and reset the comment modal
-const Closecomment = () => {
-  cmodal.style.display = "none";
-  document.getElementById("comment").value = ""
-  postid = ""
-}
-
+let postid = ""
 
 // When the user clicks the button to open the comment modal 
 const Comment = function(postID) {
@@ -280,18 +280,7 @@ const Comment = function(postID) {
    document.getElementById(postID).classList.toggle("show");
  }
 
- // When the user clicks the button it make a new post 
- commentBtn.onclick = function(event) {
-  event.preventDefault();
 
-
- }
-
- /* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-  
-}
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
@@ -307,30 +296,7 @@ window.onclick = function(event) {
   }
 }
 
- /*
 
-  let data = new FormData();
-  data.append("comment", document.getElementById("comment").value);
-  data.append("postID", postid);
-  postid = ""
-
-  fetch("http://localhost:8800/comment",
-    {
-      method: 'POST',
-      body: data
-    })
-    .then(function (response) {
-      return response.text()
-    }).then(function (text) {
-      //text is the server's response
-      console.log(text)
-      //window.location.reload();
-      Closecomment()
-    });
- */
-
-// When the user clicks on <span> (x), close the comment modal
-cspan.onclick = () => Closecomment()
 
 
 // When the user clicks anywhere outside of the modal, close it
@@ -346,29 +312,21 @@ window.onclick = function (event) {
   }
 }
 
-
 //--------------------------------------------
 
-//fillter posts
 
-const Filterpost = (name)=> {
-  
-  let data = new FormData();
-  data.append("filter", name);
-
-console.log(name)
-  fetch("http://localhost:8800/",
-    {
-      method: 'POST',
-      body: data
-    })
-    .then(function (response) {
-      return response.text()
-    }).then(function (text) {
-      //text is the server's response
-    //  console.log(text)
-      //window.location.reload();
-      ;
-    });
-
+function bindItemsInput() {
+  let inputs = document.querySelectorAll('[name="option[]"]')
+  let radioForCheckboxes = document.getElementById('radio-for-checkboxes')
+  function checkCheckboxes () {
+      let isAtLeastOneServiceSelected = false;
+      for(let i = inputs.length-1; i >= 0; --i) {
+          if (inputs[i].checked) isAtLeastOneCheckboxSelected = true;
+      }
+      radioForCheckboxes.checked = isAtLeastOneCheckboxSelected
+  }
+  for(let i = inputs.length-1; i >= 0; --i) {
+      inputs[i].addEventListener('change', checkCheckboxes)
+  }
 }
+bindItemsInput() // call in window 
