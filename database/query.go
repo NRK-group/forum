@@ -216,28 +216,39 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 }
 
 //CheckReactInPost
-func (forum *Forum) CheckReactInPost(pID, uID string) (string, bool) {
-	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE postID = '" + pID + "' AND userID = '" + uID + "'")
+func (forum *Forum) CheckReactInPost(pID, uID string) (string, int) {
+	rows, err := forum.DB.Query("SELECT reactionID, postID, userID, react FROM Reaction WHERE postID = '" + pID + "' AND userID = '" + uID + "'")
+	var reaction Reaction
 	if err != nil {
 		fmt.Print(err)
-		return "", false
+		return "", 0
 	}
-	var reactionID, postID, commentID, userID string
+	var reactionID, postID, userID string
 	var react int
 	for rows.Next() {
-		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+		rows.Scan(&reactionID, &postID, &userID, &react)
+		reaction = Reaction{
+			ReactionID: reactionID,
+			PostID:     postID,
+			UserID:     userID,
+			React:      react,
+		}
 	}
-	return reactionID, reactionID != ""
+	// fmt.Print(reactions)
+	return reactionID, reaction.React
 }
 
 //UpdatePostReaction
 //	Ex. Forum.Forum.UpdatePostReaction("b081d711-aad2-4f90-acea-2f2842e28512", "b53124c2-39f0-4f10-8e02-b7244b406b86", "-1")
 func (forum *Forum) UpdatePostReaction(pID, uID, value string) {
-	rID, ok := forum.CheckReactInPost(pID, uID)
-	fmt.Print(rID, ok)
-	if !(ok) {
-		i, _ := strconv.Atoi(value)
+	rID, v := forum.CheckReactInPost(pID, uID)
+	fmt.Println(rID, v)
+	i, _ := strconv.Atoi(value)
+	if v == 0 {
+
 		forum.ReactInPost(pID, uID, i)
+	} else if v == i {
+		forum.Delete("Reaction", "reactionID", rID)
 	} else {
 		err := forum.Update("Reaction", "react", value, "reactionID", rID)
 		fmt.Print(err)
