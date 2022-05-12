@@ -37,14 +37,43 @@
   </div>
 
   <!-- Post Filter section -->
+  <form  method="POST" action="/">
   <div class="post-filter">
-    <span class="Category">New</span>
-    <span class="Category">Top</span>
-    <span class="Category">Hot</span>
+  <div class="radio-pillbox">
+   
+  <radiogroup>
+    <div>
+      <button type="submit" name="filter" id="all" value="all" >
+      All
+      </button >
+    </div>
+
+    <div>
+      <button type="submit" name="filter" id="js" value="javascript" >
+  JavaScript
+      </button>
+    </div>
+
+    <div>
+      <button type="submit" name="filter" id="go" value="go" >
+      <label for="go">GO</label>
+      </button>
+    </div>
+    <div>
+      <button type="submit" name="filter" id="rust" value="rust" >
+  <label for="rust">Rust</label>
+    </button>
+    </div>
+   
+  </radiogroup>
+
+</div>
   </div>
 
+</form>
+
   <!-- Comments Section -->
-  <div class="Comments-section">
+  <div class="Comments-section"   >
     {{range .Posts}}
     <div class="Comment" key="{{.PostID}}">
       <div class="Comment-header">
@@ -70,14 +99,10 @@
     </div>
     <div class="dropdown">
       <div id='{{.PostID}}' class="dropdown-content">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+      
       </div>
     </div>
-    {{range .Comments}}
-    {{.Content}}
-    {{end}}
+    
     {{end}}
   </div>
 
@@ -221,6 +246,6 @@
 
 </body>
 
-<script src="../frontend/js/myScript.js"></script>
+<script src="../frontend/js/myScript.js" onload="console.log('{{.Posts}}')"></script>
 
 </html>

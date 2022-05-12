@@ -16,16 +16,22 @@ type Env struct {
 
 func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("frontend/index.html")
-
+	
 	type data struct {
 		Cookie interface{}
 		Posts  interface{}
 	}
+	filter := r.FormValue("filter")
+
 
 	if err != nil {
 		http.Error(w, "500 Internal error", http.StatusInternalServerError)
 		return
 	}
+
+	
+	
+
 	c, err := r.Cookie("session_token")
 	co := []string{}
 	if strings.Contains(c.String(), "&") {
@@ -48,19 +54,22 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost("all")}
+		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter)}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
 		}
 
 	} else {
-		page := data{Cookie: c.Value, Posts: env.Forum.AllPost("all")}
+	
+	
+		page := data{Cookie: c.Value, Posts: env.Forum.AllPost(filter)}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
 		}
 	}
+
 }
 
 func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
@@ -225,7 +234,7 @@ func (env *Env) Comment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-fmt.Println("teee")
+
 	c, err := r.Cookie("session_token")
 	co := []string{}
 	if strings.Contains(c.String(), "&") {
@@ -259,3 +268,6 @@ fmt.Println("teee")
 		}
 	}
 }
+
+
+		

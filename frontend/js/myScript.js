@@ -220,7 +220,7 @@ const Closepost = () => {
 // When the user clicks the button it make a new post 
 postBtn.onclick = function (event) {
   event.preventDefault();
-  console.log("dfgf")
+  
   let data = new FormData();
   data.append("categories", document.getElementById("categories").value);
   data.append("title", document.getElementById("title").value);
@@ -346,3 +346,29 @@ window.onclick = function (event) {
   }
 }
 
+
+//--------------------------------------------
+
+//fillter posts
+
+const Filterpost = (name)=> {
+  
+  let data = new FormData();
+  data.append("filter", name);
+
+console.log(name)
+  fetch("http://localhost:8800/",
+    {
+      method: 'POST',
+      body: data
+    })
+    .then(function (response) {
+      return response.text()
+    }).then(function (text) {
+      //text is the server's response
+    //  console.log(text)
+      //window.location.reload();
+      ;
+    });
+
+}
