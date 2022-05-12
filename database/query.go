@@ -298,12 +298,13 @@ func (forum *Forum) AllPost(filter string) []Post {
 	for rows.Next() {
 		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &content)
 		post = Post{
-			PostID:      postID,
-			DateCreated: dateCreated,
-			Content:     content,
-			Category:    category,
-			Title:       title,
-			Comments:    forum.GetComments(postID),
+			PostID:       postID,
+			DateCreated:  dateCreated,
+			Content:      content,
+			Category:     category,
+			Title:        title,
+			Comments:     forum.GetComments(postID),
+			NumOfComment: len(forum.GetComments(postID)),
 		}
 		var username string
 		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
