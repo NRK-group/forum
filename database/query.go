@@ -242,7 +242,6 @@ func (forum *Forum) CheckReactInPost(pID, uID string) (string, int) {
 //	Ex. Forum.Forum.UpdatePostReaction("b081d711-aad2-4f90-acea-2f2842e28512", "b53124c2-39f0-4f10-8e02-b7244b406b86", "-1")
 func (forum *Forum) UpdatePostReaction(pID, uID, value string) {
 	rID, v := forum.CheckReactInPost(pID, uID)
-	fmt.Println(rID, v)
 	i, _ := strconv.Atoi(value)
 	if v == 0 {
 

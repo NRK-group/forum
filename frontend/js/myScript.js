@@ -307,8 +307,6 @@ window.onclick = function (event) {
     Closeregister()
   } else if (event.target == pmodal) {
     Closepost()
-  } else if (event.target == cmodal) {
-    Closecomment()
   }
 }
 

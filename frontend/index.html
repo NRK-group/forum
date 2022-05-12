@@ -91,9 +91,11 @@
       <div class="Comment-footer">
         <span class="Category"> {{.Category}}</span>
         <div class="Left-Comment-footer">
-          <span class="Category">like</span>
-          <span class="Category">dislike</span>
-          <a id="commentModalBtn" onclick="Comment('{{.PostID}}')" class="Category">12 Comments</a>
+          <form  method="POST" action="/">
+          <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}' >{{.Reaction.Likes}} like</button>
+          <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}" >{{.Reaction.Dislikes}} dislike</button>
+          </form>
+          <button id="commentModalBtn" onclick="Comment('{{.PostID}}')" >{{.NumOfComment}} Comments</button>
         </div>
       </div>
     </div>
@@ -120,6 +122,12 @@
           <p>
             {{.Content}}
           </p>
+          <div >
+            <form method="POST" action="/">
+              <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Likes}} like</button>
+              <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Dislikes}} dislike</button>
+              </form>
+          </div>
         </div>
         <br />
         {{end}}

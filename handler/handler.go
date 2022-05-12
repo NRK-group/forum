@@ -25,6 +25,10 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 	filter := r.FormValue("filter")
 	content := r.FormValue("comment")
 	postID := r.FormValue("postID")
+	like := r.FormValue("likes")
+	dislike := r.FormValue("dislike")
+	likesc := r.FormValue("likesc")
+	dislikec := r.FormValue("dislikec")
 
 	if err != nil {
 		http.Error(w, "500 Internal error", http.StatusInternalServerError)
@@ -51,9 +55,19 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if content != "" {
-	
 		env.Forum.CreateComment(co[0], postID, content)
-
+	} else if like != "" {
+		li := strings.Split(like, "&")
+		env.Forum.UpdatePostReaction(li[1],co[0],li[0])
+	} else if dislike != "" {
+		disl := strings.Split(dislike, "&")
+		env.Forum.UpdatePostReaction(disl[1],co[0],disl[0])
+	}  else if likesc != "" {
+		lic := strings.Split(likesc, "&")
+		env.Forum.UpdateCommentReaction(lic[1],lic[2],co[0],lic[0])
+	} else if dislikec != "" {
+		dislc := strings.Split(dislikec, "&")
+		env.Forum.UpdateCommentReaction(dislc[1],dislc[2],co[0],dislc[0])
 	}
 
 	if err != nil {
