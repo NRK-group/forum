@@ -255,28 +255,38 @@ func (forum *Forum) UpdatePostReaction(pID, uID, value string) {
 }
 
 //CheckReactInPost
-func (forum *Forum) CheckReactInComment(cID, uID string) (string, bool) {
+func (forum *Forum) CheckReactInComment(cID, uID string) (string, int) {
 	rows, err := forum.DB.Query("SELECT * FROM Reaction WHERE commentID = '" + cID + "' AND userID = '" + uID + "'")
+	var reaction Reaction
 	if err != nil {
 		fmt.Print(err)
-		return "", false
+		return "", 0
 	}
 	var reactionID, postID, commentID, userID string
 	var react int
 	for rows.Next() {
 		rows.Scan(&reactionID, &postID, &commentID, &userID, &react)
+		reaction = Reaction{
+			ReactionID: reactionID,
+			PostID:     postID,
+			CommentID:  commentID,
+			UserID:     userID,
+			React:      react,
+		}
 	}
-	return reactionID, reactionID != ""
+	return reactionID, reaction.React
 }
 
 //UpdatePostReaction
 //	Ex. Forum.Forum.UpdateCommentReaction("98e63b80-d1de-40c2-b4c7-988249c5c60b", "c3dd7cc7-46a1-4d57-b6fb-378f0741d461", "b53124c2-39f0-4f10-8e02-b7244b406b86", "1")
 func (forum *Forum) UpdateCommentReaction(cID, pID, uID, value string) {
-	rID, ok := forum.CheckReactInComment(cID, uID)
-	fmt.Print(rID, ok)
-	if !(ok) {
+	rID, v := forum.CheckReactInComment(cID, uID)
+	i, _ := strconv.Atoi(value)
+	if v == 0 {
 		i, _ := strconv.Atoi(value)
 		forum.ReactInComment(pID, cID, uID, i)
+	} else if v == i {
+		forum.Delete("Reaction", "reactionID", rID)
 	} else {
 		err := forum.Update("Reaction", "react", value, "reactionID", rID)
 		fmt.Print(err)
@@ -386,6 +396,7 @@ func (forum *Forum) GetComments(pID string) []Comment {
 			UserID:      userID,
 			DateCreated: dateCreated,
 			Content:     content,
+			Reaction:    forum.GetReactionsInComment(commentID),
 		}
 		var username string
 		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
@@ -403,7 +414,7 @@ func (forum *Forum) GetComments(pID string) []Comment {
 }
 
 func (forum *Forum) GetReactionsInPost(pID string) Reaction {
-	rows, err := forum.DB.Query("SELECT reactionID, postID, userID, react FROM Reaction WHERE postID = '" + pID + "'")
+	rows, err := forum.DB.Query("SELECT reactionID, postID, userID, react FROM Reaction WHERE postID = '" + pID + "' AND commentID IS NULL")
 	var reaction Reaction
 	// var reactions []Reaction
 	if err != nil {
