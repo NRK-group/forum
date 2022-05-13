@@ -11,7 +11,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-var Date = time.Now().Format("2006-January-01 15:04:05")
+var Date = time.Now().Format("2006 January 02 15:04:05")
 
 // start of the create query
 
@@ -217,7 +217,7 @@ func (forum *Forum) CheckSession(sessionId string) bool {
 
 //CheckReactInPost
 func (forum *Forum) CheckReactInPost(pID, uID string) (string, int) {
-	rows, err := forum.DB.Query("SELECT reactionID, postID, userID, react FROM Reaction WHERE postID = '" + pID + "' AND userID = '" + uID + "'")
+	rows, err := forum.DB.Query("SELECT reactionID, postID, userID, react FROM Reaction WHERE postID = '" + pID + "' AND userID = '" + uID + "' AND commentID IS NULL")
 	var reaction Reaction
 	if err != nil {
 		fmt.Print(err)
@@ -244,13 +244,11 @@ func (forum *Forum) UpdatePostReaction(pID, uID, value string) {
 	rID, v := forum.CheckReactInPost(pID, uID)
 	i, _ := strconv.Atoi(value)
 	if v == 0 {
-
 		forum.ReactInPost(pID, uID, i)
 	} else if v == i {
 		forum.Delete("Reaction", "reactionID", rID)
 	} else {
-		err := forum.Update("Reaction", "react", value, "reactionID", rID)
-		fmt.Print(err)
+		forum.Update("Reaction", "react", value, "reactionID", rID)
 	}
 }
 
@@ -288,8 +286,7 @@ func (forum *Forum) UpdateCommentReaction(cID, pID, uID, value string) {
 	} else if v == i {
 		forum.Delete("Reaction", "reactionID", rID)
 	} else {
-		err := forum.Update("Reaction", "react", value, "reactionID", rID)
-		fmt.Print(err)
+		forum.Update("Reaction", "react", value, "reactionID", rID)
 	}
 }
 
