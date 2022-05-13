@@ -1,5 +1,6 @@
-
-
+if (window.history.replaceState) {
+  window.history.replaceState(null, null, window.location.href);
+}
 let session;
 
 // Get the login modal
@@ -185,7 +186,7 @@ const Onload = (cookie) => {
     if (session.length > 2) {
       navbutdivnl.style.display = "none"
       navbutdivl.style.display = "flex"
-      document.getElementById("Form-comment").style.display ="flex"
+      document.getElementById("Form-comment").style.display = "flex"
     } else {
       document.getElementById("Form-comment").style.display = "none"
     }
@@ -219,41 +220,41 @@ const Closepost = () => {
 postBtn.onclick = function (event) {
   event.preventDefault();
   let data = new FormData();
-let flag = false;
+  let flag = false;
   let inputs = document.querySelectorAll('[name="option[]"]')
   let categories = "";
-      for(let i = inputs.length-1; i >= 0; --i) {
-          if (inputs[i].checked) {
-            categories = categories + inputs[i].value
-            flag = true;
-          } 
-      }
-     
+  for (let i = inputs.length - 1; i >= 0; --i) {
+    if (inputs[i].checked) {
+      categories = categories + inputs[i].value
+      flag = true;
+    }
+  }
+
 
   if (flag) {
     if (document.getElementById("title").value === "") {
       alert("You need title ")
     } else {
-  data.append("categories", categories);
-  data.append("title", document.getElementById("title").value);
-  data.append("post", document.getElementById("post").value);
+      data.append("categories", categories);
+      data.append("title", document.getElementById("title").value);
+      data.append("post", document.getElementById("post").value);
 
-  fetch("http://localhost:8800/post",
-    {
-      method: 'POST',
-      body: data
-    })
-    .then(function (response) {
-      return response.text()
-    }).then(function (text) {
-      //text is the server's response
-      console.log(text)
-      window.location.reload();
-      Closepost()
-    });
+      fetch("http://localhost:8800/post",
+        {
+          method: 'POST',
+          body: data
+        })
+        .then(function (response) {
+          return response.text()
+        }).then(function (text) {
+          //text is the server's response
+          console.log(text)
+          window.location.reload();
+          Closepost()
+        });
+    }
   }
-}
-   else {
+  else {
     alert("You much pick one of the categories")
   }
 
@@ -274,16 +275,16 @@ pspan.onclick = () => Closepost()
 let postid = ""
 
 // When the user clicks the button to open the comment modal 
-const Comment = function(postID) {
-   //cmodal.style.display = "block";
-   postid = postID  
-   document.getElementById(postID).classList.toggle("show");
- }
+const Comment = function (postID) {
+  //cmodal.style.display = "block";
+  postid = postID
+  document.getElementById(postID).classList.toggle("show");
+}
 
 
 
 // Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (!event.target.matches('.dropbtn')) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
@@ -316,15 +317,15 @@ window.onclick = function (event) {
 function bindItemsInput() {
   let inputs = document.querySelectorAll('[name="option[]"]')
   let radioForCheckboxes = document.getElementById('radio-for-checkboxes')
-  function checkCheckboxes () {
-      let isAtLeastOneServiceSelected = false;
-      for(let i = inputs.length-1; i >= 0; --i) {
-          if (inputs[i].checked) isAtLeastOneCheckboxSelected = true;
-      }
-      radioForCheckboxes.checked = isAtLeastOneCheckboxSelected
+  function checkCheckboxes() {
+    let isAtLeastOneServiceSelected = false;
+    for (let i = inputs.length - 1; i >= 0; --i) {
+      if (inputs[i].checked) isAtLeastOneCheckboxSelected = true;
+    }
+    radioForCheckboxes.checked = isAtLeastOneCheckboxSelected
   }
-  for(let i = inputs.length-1; i >= 0; --i) {
-      inputs[i].addEventListener('change', checkCheckboxes)
+  for (let i = inputs.length - 1; i >= 0; --i) {
+    inputs[i].addEventListener('change', checkCheckboxes)
   }
 }
 bindItemsInput() // call in window 
