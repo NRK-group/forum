@@ -46,7 +46,7 @@ fbtn_login.onclick = function (event) {
         document.getElementById("login-err").innerText = text.substring(1)
       } else if (text[0] === "1") {
         document.getElementById("login-err").innerText = ""
-        
+
         for (let i =  Not_Login_div.length - 1; i >= 0; --i) {
           Not_Login_div[i].style.display = "none"
         }
@@ -243,7 +243,7 @@ postBtn.onclick = function (event) {
   let categories = "";
   for (let i = inputs.length - 1; i >= 0; --i) {
     if (inputs[i].checked) {
-      categories = categories + inputs[i].value
+      categories = categories + " " + inputs[i].value
       flag = true;
     }
   }
