@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"forum/password"
@@ -292,13 +293,23 @@ func (forum *Forum) UpdateCommentReaction(cID, pID, uID, value string) {
 
 //AllPost
 //is a method of forum that will return all post
-func (forum *Forum) AllPost(filter string) []Post {
-	rows, err := forum.DB.Query("SELECT * FROM Post ")
+func (forum *Forum) AllPost(filter, uID string) []Post {
 	var post Post
 	var posts []Post
-	if err != nil {
-		fmt.Print(err)
-		return posts
+	var rows *sql.Rows
+	var err error
+	if uID != "" {
+		rows, err = forum.DB.Query("SELECT * FROM Post WHERE userID = '" + uID + "'")
+		if err != nil {
+			fmt.Print(err)
+			return posts
+		}
+	} else {
+		rows, err = forum.DB.Query("SELECT * FROM Post ")
+		if err != nil {
+			fmt.Print(err)
+			return posts
+		}
 	}
 	var postID, userID, title, category, dateCreated, content string
 	for rows.Next() {
@@ -364,12 +375,55 @@ func (forum *Forum) YourPost(filter, uID string) []Post {
 			Category:    category,
 			Title:       title,
 		}
-		if filter == "old" {
-			posts = append(posts, post)
-		} else {
-			posts = append([]Post{post}, posts...)
-		}
+		posts = append([]Post{post}, posts...)
+	}
+	return posts
+}
 
+//YourLikedPost
+//is a method of forum that return all the liked post of the user based on their userID
+func (forum *Forum) YourLikedPost(uID string) []Post {
+	var post Post
+	var posts []Post
+	rows, err := forum.DB.Query(`
+		SELECT Post.*
+		FROM Post
+		WHERE Post.postID in (
+			SELECT postID 
+			FROM Reaction 
+			WHERE 
+				userID = '` + uID + `' 
+				AND react = 1 
+				AND commentID IS NULL)`)
+	if err != nil {
+		fmt.Println(err)
+		return posts
+	}
+	var pID, userID, title, category, dateCreated, content string
+	for rows.Next() {
+		rows.Scan(&pID, &userID, &title, &category, &dateCreated, &content)
+		post = Post{
+			PostID:       pID,
+			UserID:       userID,
+			Title:        title,
+			Category:     category,
+			DateCreated:  dateCreated,
+			Content:      content,
+			Comments:     forum.GetComments(pID),
+			Reaction:     forum.GetReactionsInPost(pID),
+			NumOfComment: len(forum.GetComments(pID)),
+		}
+		var username string
+		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
+		if err != nil {
+			fmt.Print(err)
+			return posts
+		}
+		for rows2.Next() {
+			rows2.Scan(&username)
+		}
+		post.UserID = username
+		posts = append([]Post{post}, posts...)
 	}
 	return posts
 }

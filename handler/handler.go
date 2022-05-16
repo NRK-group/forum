@@ -51,7 +51,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		// a, _ := fmt.Fprintf(w, "err")
-		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter)}
+		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter, "")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
@@ -64,6 +64,7 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		dislike := r.FormValue("dislike")
 		likesc := r.FormValue("likesc")
 		dislikec := r.FormValue("dislikec")
+
 		if content != "" {
 			env.Forum.CreateComment(co[0], postID, content)
 		}
@@ -83,7 +84,16 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 			dislc := strings.Split(dislikec, "&")
 			env.Forum.UpdateCommentReaction(dislc[1], dislc[2], co[0], dislc[0])
 		}
-		page := data{Cookie: c.Value, Posts: env.Forum.AllPost(filter)}
+		yourPost := r.FormValue("yourPost")
+		yourLikedPosts := r.FormValue("yourLikedPosts")
+		var page data
+		if yourPost == "on" {
+			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, co[0])}
+		} else if yourLikedPosts == "on" {
+			page = data{Cookie: c.Value, Posts: env.Forum.YourLikedPost(co[0])}
+		} else {
+			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, "")}
+		}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
