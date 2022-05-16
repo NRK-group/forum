@@ -46,8 +46,14 @@ fbtn_login.onclick = function (event) {
         document.getElementById("login-err").innerText = text.substring(1)
       } else if (text[0] === "1") {
         document.getElementById("login-err").innerText = ""
-        navbutdivnl.style.display = "none"
-        navbutdivl.style.display = "flex"
+        
+        for (let i =  Not_Login_div.length - 1; i >= 0; --i) {
+          Not_Login_div[i].style.display = "none"
+        }
+      
+        for (let i =  Login_div.length - 1; i >= 0; --i) {
+          Login_div[i].style.display = "flex"
+        }
         Closelogin()
         window.location.reload();
       }
@@ -90,8 +96,8 @@ let rspan = document.getElementsByClassName("rclose")[0];
 // Get the button that opens that register a user 
 let fbtn_register = document.getElementById("form-btn-register");
 
-let navbutdivnl = document.getElementById("Not_Login");
-let navbutdivl = document.getElementById("Login");
+let Not_Login_div = document.querySelectorAll('[id="Not_Login"]')
+let Login_div = document.querySelectorAll('[id="Login"]')
 
 const Closeregister = () => {
   document.getElementById("rUserName").value = ""
@@ -172,8 +178,14 @@ logoutBtn.onclick = function () {
       window.location.reload();
     });
 
-  navbutdivnl.style.display = "flex"
-  navbutdivl.style.display = "none"
+
+  for (let i =  Not_Login_div.length - 1; i >= 0; --i) {
+    Not_Login_div[i].style.display = "flex"
+  }
+
+  for (let i =  Login_div.length - 1; i >= 0; --i) {
+    Login_div[i].style.display = "none"
+  }
 }
 
 //--------------------------------------------
@@ -184,8 +196,14 @@ const Onload = (cookie) => {
     session = cookie.split("&")
 
     if (session.length > 2) {
-      navbutdivnl.style.display = "none"
-      navbutdivl.style.display = "flex"
+      
+      for (let i =  Not_Login_div.length - 1; i >= 0; --i) {
+        Not_Login_div[i].style.display = "none"
+      }
+    
+      for (let i =  Login_div.length - 1; i >= 0; --i) {
+        Login_div[i].style.display = "flex"
+      }
       document.getElementById("Form-comment").style.display = "flex"
     } else {
       document.getElementById("Form-comment").style.display = "none"

@@ -91,10 +91,18 @@
       <div class="Comment-footer">
         <span class="Category"> {{.Category}}</span>
         <div class="Left-Comment-footer">
-          <form  method="POST" action="/">
-          <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}' >{{.Reaction.Likes}} like</button>
-          <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}" >{{.Reaction.Dislikes}} dislike</button>
-          </form>
+
+
+          <div id="Not_Login" class="Not_Login">
+            <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}' >{{.Reaction.Likes}} like</button>
+              <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}" >{{.Reaction.Dislikes}} dislike</button>
+          </div>
+          <div id="Login" class="Login">
+            <form  method="POST" action="/">
+              <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}' >{{.Reaction.Likes}} like</button>
+              <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}" >{{.Reaction.Dislikes}} dislike</button>
+              </form>
+          </div>
           <button id="commentModalBtn" onclick="Comment('{{.PostID}}')" >{{.NumOfComment}} Comments</button>
         </div>
       </div>
@@ -123,10 +131,16 @@
             {{.Content}}
           </p>
           <div >
-            <form method="POST" action="/">
-              <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Likes}} like</button>
-              <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Dislikes}} dislike</button>
-              </form>
+            <div id="Not_Login" class="Not_Login">
+                <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Likes}} like</button>
+                <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Dislikes}} dislike</button>
+            </div>
+            <div id="Login" class="Login">
+              <form method="POST" action="/">
+                <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Likes}} like</button>
+                <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Dislikes}} dislike</button>
+                </form>
+            </div>
           </div>
         </div>
         <br />
