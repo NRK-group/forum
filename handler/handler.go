@@ -14,27 +14,11 @@ type Env struct {
 	Forum *database.Forum
 }
 
-func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("frontend/index.html")
-
-	type data struct {
-		Cookie interface{}
-		Posts  interface{}
-	}
-
-	filter := r.FormValue("filter")
-
-	if err != nil {
-		http.Error(w, "500 Internal error", http.StatusInternalServerError)
-		return
-	}
-
-	c, err := r.Cookie("session_token")
+func (env *Env) CheckCookie(w http.ResponseWriter, c *http.Cookie) []string {
 	co := []string{}
 	if strings.Contains(c.String(), "&") {
 		co = strings.Split(c.Value, "&")
 	}
-
 	if len(co) != 0 {
 		if !(env.Forum.CheckSession(co[1])) {
 			// Set the new token as the users `session_token` cookie
@@ -46,18 +30,34 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
+			w.Write([]byte("Error - You are not sign in"))
+		} else {
+			return co
 		}
 	}
-
+	return co
+}
+func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("frontend/index.html")
 	if err != nil {
-		// a, _ := fmt.Fprintf(w, "err")
-		page := data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter, "")}
+		http.Error(w, "500 Internal error", http.StatusInternalServerError)
+		return
+	}
+	type data struct {
+		Cookie interface{}
+		Posts  interface{}
+	}
+	var page data
+	filter := r.FormValue("filter")
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		page = data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter, "")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
 		}
-
 	} else {
+		co := env.CheckCookie(w, c)
 		content := r.FormValue("comment")
 		postID := r.FormValue("postID")
 		like := r.FormValue("likes")
@@ -86,7 +86,6 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		}
 		yourPost := r.FormValue("yourPost")
 		yourLikedPosts := r.FormValue("yourLikedPosts")
-		var page data
 		if yourPost == "on" {
 			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, co[0])}
 		} else if yourLikedPosts == "on" {
@@ -111,21 +110,17 @@ func (env *Env) Login(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		userName := r.FormValue("userName")
 		password := r.FormValue("password")
-
 		if userName == "" || password == "" {
 			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 			return
 		}
-
 		UserID, Username, SessionID, err := env.Forum.LoginUsers(userName, r.UserAgent(), GetIP(r), password)
-
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
 			w.Write([]byte("0" + err.Error()))
 			return
 		}
-
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
 			Value:   UserID + "&" + SessionID + "&" + Username,
@@ -161,14 +156,12 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		_, _, _, err := env.Forum.CreateUser(userName, email, r.UserAgent(), GetIP(r), password)
-		// fmt.Println(err.Error())
 		if err != nil {
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
 			w.Write([]byte("0" + err.Error()))
 			return
 		}
-
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
 		w.Write([]byte("1Register successful"))
@@ -179,7 +172,6 @@ func (env *Env) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (env *Env) Logout(w http.ResponseWriter, r *http.Request) {
-
 	if r.URL.Path != "/logout" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
@@ -223,25 +215,8 @@ func (env *Env) Post(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
 	c, err := r.Cookie("session_token")
-	co := []string{}
-	if strings.Contains(c.String(), "&") {
-		co = strings.Split(c.Value, "&")
-	}
-	if len(co) != 0 {
-		if !(env.Forum.CheckSession(co[1])) {
-			// Set the new token as the users `session_token` cookie
-			http.SetCookie(w, &http.Cookie{
-				Name:    "session_token",
-				Value:   "",
-				Expires: time.Now(),
-			})
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-type", "application/text")
-			w.Write([]byte("Error - You are not sign in"))
-		}
-	}
+	co := env.CheckCookie(w, c)
 	if err == nil {
 		switch r.Method {
 		case "POST":
@@ -264,32 +239,14 @@ func (env *Env) Comment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
 	}
-
 	c, err := r.Cookie("session_token")
-	co := []string{}
-	if strings.Contains(c.String(), "&") {
-		co = strings.Split(c.Value, "&")
-	}
-	if len(co) != 0 {
-		if !(env.Forum.CheckSession(co[1])) {
-			// Set the new token as the users `session_token` cookie
-			http.SetCookie(w, &http.Cookie{
-				Name:    "session_token",
-				Value:   "",
-				Expires: time.Now(),
-			})
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-type", "application/text")
-			w.Write([]byte("Error - You are not sign in"))
-		}
-	}
+	co := env.CheckCookie(w, c)
 	if err == nil {
 		switch r.Method {
 		case "POST":
 			content := r.FormValue("comment")
 			postID := r.FormValue("postID")
 			commentID, _ := env.Forum.CreateComment(co[0], postID, content)
-
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
 			w.Write([]byte(commentID))
