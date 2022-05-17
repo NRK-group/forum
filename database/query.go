@@ -12,13 +12,12 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-var Date = time.Now().Format("2006 January 02 15:04:05")
-
 // start of the create query
 
 // CreateUser
 // is a method of database that add user in it.
 func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass string) (string, string, string, error) {
+	var date = time.Now().Format("2006 January 02 15:04:05")
 	userID := uuid.NewV4()
 	pass, _ = password.HashPassword(pass)
 	stmt, err := forum.DB.Prepare(`
@@ -27,7 +26,7 @@ func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass strin
 	if err != nil {
 		return "", "", "", err
 	}
-	_, err = stmt.Exec(userID, username, Date, email, pass)
+	_, err = stmt.Exec(userID, username, date, email, pass)
 	if err != nil {
 		return "", "", "", err
 	}
@@ -42,12 +41,13 @@ func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass strin
 // CreateSession
 // is a method of database that add session in it based on the user login time.
 func (forum *Forum) CreateSession(userID, userAgent, ipAddress string) (string, error) {
+	var date = time.Now().Format("2006 January 02 15:04:05")
 	sessionID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
 		INSERT INTO Session (sessionID, userID, userAgent, ipAddress, loginTime) values (?, ?, ?, ?, ?)
 	`)
 	// fmt.Print(err1)
-	_, err := stmt.Exec(sessionID, userID, userAgent, ipAddress, Date)
+	_, err := stmt.Exec(sessionID, userID, userAgent, ipAddress, date)
 	if err != nil {
 		return "", err
 	}
@@ -58,11 +58,12 @@ func (forum *Forum) CreateSession(userID, userAgent, ipAddress string) (string, 
 // CreatePost
 // is a method of database that add post in it.
 func (forum *Forum) CreatePost(userID, content, category, title string) (string, error) {
+	var date = time.Now().Format("2006 January 02 15:04:05")
 	postID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
 		INSERT INTO Post (postID, userID, dateCreated, content, category, title) values (?, ?, ?, ?, ?, ?)
 	`)
-	_, err := stmt.Exec(postID, userID, Date, content, category, title)
+	_, err := stmt.Exec(postID, userID, date, content, category, title)
 	if err != nil {
 		return "", err
 	}
@@ -72,11 +73,12 @@ func (forum *Forum) CreatePost(userID, content, category, title string) (string,
 // CreateComment
 // is a method of database that add comment in it.
 func (forum *Forum) CreateComment(userID, postID, content string) (string, error) {
+	var date = time.Now().Format("2006 January 02 15:04:05")
 	commentID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
 		INSERT INTO Comment (commentID, userID, postID, dateCreated, content) values (?, ?, ?, ?, ?)
 	`)
-	_, err := stmt.Exec(commentID, userID, postID, Date, content)
+	_, err := stmt.Exec(commentID, userID, postID, date, content)
 	if err != nil {
 		return "", err
 	}
