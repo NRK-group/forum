@@ -1,10 +1,10 @@
 FROM golang:1.17
 
+RUN mkdir /forum
+
+ADD . /forum
+
 WORKDIR /forum
-
-COPY . .
-
-# RUN go mod init forum/forum
 
 RUN go mod tidy
 
