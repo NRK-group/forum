@@ -338,7 +338,7 @@ func (forum *Forum) AllPost(filter, uID string) []Post {
 		post.UserID = username
 		switch filter {
 		case "go":
-			if strings.Contains(category, "Go") {
+			if strings.Contains(category, "go") {
 				posts = append([]Post{post}, posts...)
 			}
 		case "javascript":
