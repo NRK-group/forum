@@ -27,10 +27,7 @@ func (env *Env) CheckCookie(w http.ResponseWriter, c *http.Cookie) []string {
 				Value:   "",
 				Expires: time.Now(),
 			})
-
-			w.WriteHeader(http.StatusOK)
-			w.Header().Set("Content-type", "application/text")
-			w.Write([]byte("Error - You are not sign in"))
+			
 		} else {
 			return co
 		}
