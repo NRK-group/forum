@@ -27,7 +27,7 @@ func (env *Env) CheckCookie(w http.ResponseWriter, c *http.Cookie) []string {
 				Value:   "",
 				Expires: time.Now(),
 			})
-			
+
 		} else {
 			return co
 		}
@@ -41,14 +41,15 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type data struct {
-		Cookie interface{}
-		Posts  interface{}
+		Cookie      interface{}
+		CurrentUser interface{}
+		Posts       interface{}
 	}
 	var page data
 	filter := r.FormValue("filter")
 	c, err := r.Cookie("session_token")
 	if err != nil {
-		page = data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter, "")}
+		page = data{Cookie: err.Error(), Posts: env.Forum.AllPost(filter, ""), CurrentUser: env.Forum.GetUser("")}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)
 			return
@@ -84,11 +85,11 @@ func (env *Env) Home(w http.ResponseWriter, r *http.Request) {
 		yourPost := r.FormValue("yourPost")
 		yourLikedPosts := r.FormValue("yourLikedPosts")
 		if yourPost == "on" {
-			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, co[0])}
+			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, co[0]), CurrentUser: env.Forum.GetUser(co[0])}
 		} else if yourLikedPosts == "on" {
-			page = data{Cookie: c.Value, Posts: env.Forum.YourLikedPost(co[0])}
+			page = data{Cookie: c.Value, Posts: env.Forum.YourLikedPost(co[0]), CurrentUser: env.Forum.GetUser(co[0])}
 		} else {
-			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, "")}
+			page = data{Cookie: c.Value, Posts: env.Forum.AllPost(filter, ""), CurrentUser: env.Forum.GetUser(co[0])}
 		}
 		if err := t.Execute(w, page); err != nil {
 			http.Error(w, "500 Internal error", http.StatusInternalServerError)

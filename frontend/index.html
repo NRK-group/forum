@@ -5,22 +5,26 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
+  <title>Forum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="../frontend/css/all.css" />
 </head>
 
 <body class="Body" onload="Onload('{{.Cookie}}')">
   <!-- Navbar -->
   <div class="Navbar">
-    <div class="Navbar-logo">FORUM</div>
-    <div class="Navbar-title">QUESTIONS</div>
+    <div class="Navbar-logo"><span>01</span>Forum</div>
+    <div class="Navbar-title">Questions</div>
     <div class="Navbar-buttons">
       <div id="Not_Login" class="Not_Login">
         <span><button id="registerBtn" class="Nav-Register-btn">Register</button></span>
         <span><button id="loginBtn" class="Nav-Login-btn">Login</button></span>
       </div>
       <div id="Login" class="Login">
-        <span><button id="postModalBtn" class="Nav-Post-btn">Added Post</button></span>
+        <span><button id="postModalBtn" class="Nav-Post-btn">Add Post</button></span>
         <span><button id="logoutBtn" class="Nav-Logout-btn">Logout</button></span>
       </div>
     </div>
@@ -33,142 +37,148 @@
     </div>
     <div class="Menu">
       <p>MENU</p>
-      <div>
-        <div class="menu">
-        <div id="Not_Login" class="Not_Login">
+    </div>
+    <div class="personal-menu">
+      <div id="Not_Login" class="Not_Login">
 
-        </div>
-        <div id="Login" class="Login">
-          <form  method="POST" action="/">
-            <button type="submit" name="yourPost" value="on" > Your Post</button>
-            <button type="submit" name="yourLikedPosts" value="on" > Your liked Posts</button>
-          </form>
-        </div>
-        </div>
       </div>
+      <form method="POST" action="/">
+        <div id="Login" class="Login">
+          <div>Personal Navigator</div>
+          <button type="submit" name="yourPost" value="on"> Your Post</button>
+          <button type="submit" name="yourLikedPosts" value="on"> Your liked Posts</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <!-- Post Filter section -->
-  <form  method="POST" action="/">
-  <div class="post-filter">
-  <div class="radio-pillbox">
-   
-  <radiogroup>
-    <div>
-      <button type="submit" name="filter" id="all" value="all" >
-      All
-      </button >
-    </div>
+  <form method="POST" action="/">
+    <div class="post-filter">
+      <div class="radio-pillbox">
+        <radiogroup>
+          <div>
+            <button type="submit" name="filter" id="all" value="all">
+              <label for="all">All</label>
+            </button>
+          </div>
+          <div>
+            <button type="submit" name="filter" id="js" value="javascript">
+              <label for="js">JavaScript</label>
+            </button>
+          </div>
 
-    <div>
-      <button type="submit" name="filter" id="js" value="javascript" >
-  JavaScript
-      </button>
+          <div>
+            <button type="submit" name="filter" id="go" value="go">
+              <label for="go">Go</label>
+            </button>
+          </div>
+          <div>
+            <button type="submit" name="filter" id="rust" value="rust" checked>
+              <label for="rust">Rust</label>
+            </button>
+          </div>
+        </radiogroup>
+      </div>
     </div>
-
-    <div>
-      <button type="submit" name="filter" id="go" value="go" >
-      <label for="go">GO</label>
-      </button>
-    </div>
-    <div>
-      <button type="submit" name="filter" id="rust" value="rust" >
-  <label for="rust">Rust</label>
-    </button>
-    </div>
-   
-  </radiogroup>
-
-</div>
-  </div>
-
-</form>
+  </form>
 
   <!-- Comments Section -->
-  <div class="Comments-section"   >
+  <div class="Comments-section">
     {{range .Posts}}
     <div class="Comment" key="{{.PostID}}">
       <div class="Comment-header">
         <div class="chip">
           <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          {{.UserID}}
+          <span>{{.UserID}}</span>
         </div>
+        <span class="right">{{.DateCreated}}</span>
       </div>
       <div class="Comment-body">
-        <h2>{{.Title}}</h2>
+        <h3>{{.Title}}</h3>
         <p id="Content">
           {{.Content}}
         </p>
       </div>
       <div class="Comment-footer">
-        <span class="Category"> {{.Category}}</span>
+        <span class="Category">{{.Category}}</span>
         <div class="Left-Comment-footer">
-
-
           <div id="Not_Login" class="Not_Login">
-            <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}' >{{.Reaction.Likes}} like</button>
-              <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}" >{{.Reaction.Dislikes}} dislike</button>
+            <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}'>{{.Reaction.Likes}} like</button>
+            <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}">{{.Reaction.Dislikes}}
+              dislike</button>
           </div>
           <div id="Login" class="Login">
-            <form  method="POST" action="/">
-              <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}' >{{.Reaction.Likes}} like</button>
-              <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}" >{{.Reaction.Dislikes}} dislike</button>
-              </form>
+            <form method="POST" action="/">
+              <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}'>{{.Reaction.Likes}} like</button>
+              <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}">{{.Reaction.Dislikes}}
+                dislike</button>
+            </form>
           </div>
-          <button id="commentModalBtn" onclick="Comment('{{.PostID}}')" >{{.NumOfComment}} Comments</button>
+          <button id="commentModalBtn" onclick="Comment('{{.PostID}}')">{{.NumOfComment}} Comments</button>
         </div>
       </div>
     </div>
     <div class="dropdown">
       <div id='{{.PostID}}' class="dropdown-content">
-      <div class="Comment">
-      
-  
-        <form class="Form_comment" method="POST" action="/" id="Form-comment">
-          <div class="Form-comment-textarea">
-            <textarea id="comment" name="comment" rows="10" cols="50" required> </textarea>
-          </div>
-          <button type="submit" value='{{.PostID}}' name="postID" class="form-btn-comment">Comment</button>
-        </form>
-    
-        <br />
-        </center>
-        {{range .Comments}}
-        <div class="Comment-box">
-          <div class="chip">
-            <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-            {{.UserID}}
-          </div>
-          <p>
-            {{.Content}}
-          </p>
-          <div >
-            <div id="Not_Login" class="Not_Login">
-                <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Likes}} like</button>
-                <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Dislikes}} dislike</button>
+        <div>
+          <form class="Form_comment" method="POST" action="/" id="Form-comment">
+            <div class="Form-comment-textarea">
+              <textarea id="comment" name="comment" rows="10" cols="50" required></textarea>
             </div>
-            <div id="Login" class="Login">
-              <form method="POST" action="/">
-                <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Likes}} like</button>
-                <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}"> {{.Reaction.Dislikes}} dislike</button>
+            <button type="submit" value='{{.PostID}}' name="postID" class="form-btn-comment">Comment</button>
+          </form>
+
+          <br />
+          </center>
+          {{range .Comments}}
+          <div class="Comment-box">
+            <div class="chip">
+              <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
+              <div>{{.UserID}}</div>
+              <div>{{.DateCreated}}</div>
+            </div>
+            <p>
+              {{.Content}}
+            </p>
+            <div>
+              <div id="Not_Login" class="Not_Login">
+                <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}">
+                  {{.Reaction.Likes}} like</button>
+                <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}">
+                  {{.Reaction.Dislikes}} dislike</button>
+              </div>
+              <div id="Login" class="Login">
+                <form method="POST" action="/">
+                  <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}">
+                    {{.Reaction.Likes}} like</button>
+                  <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}">
+                    {{.Reaction.Dislikes}} dislike</button>
                 </form>
+              </div>
             </div>
           </div>
+          <br />
+          {{end}}
         </div>
-        <br />
-        {{end}}
-      </div>
       </div>
     </div>
     {{end}}
   </div>
 
   <div class="Help-box">
-    <!-- <div>Featured links</div>
-    <div><a class="link" href="http://localhost:8800/">http://localhost:8800</a></div>
-    <div><a class="link" href="https://stackoverflow.com/questions">https://stackoverflow.com/questions</a></div>
-    <div><a class="link" href="https://git.learn.01founders.co">https://git.learn.01founders.co</a></div> -->
+    <div id="Login" class="Login">
+      <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
+      <div>{{.CurrentUser.Username}}</div>
+      <div>{{.CurrentUser.DateCreated}}</div>
+    </div>
+    <div id="Not_Login" class="Not_Login">
+      Featured Links
+      <!-- <div>Featured links</div>
+      <div><a class="link" href="http://localhost:8800/">http://localhost:8800</a></div>
+      <div><a class="link" href="https://stackoverflow.com/questions">https://stackoverflow.com/questions</a></div>
+      <div><a class="link" href="https://git.learn.01founders.co">https://git.learn.01founders.co</a></div> -->
+    </div>
   </div>
 
   <!-- The Login Modal -->
@@ -259,27 +269,27 @@
             <div class="Form-post-inputBox">
               <label for="Categories">Categories:</label>
               <span><input type="checkbox" name="option[]" value="javascript"> javascript </input></span>
-              <span><input type="checkbox" name="option[]" value="go"/> go </input></span>
-              <span> <input type="checkbox" name="option[]" value="rust"/> rust </input></span>
-             </div>
-              <br />
-              <label> Title</label>
-              <input id="title" name="title" required />
+              <span><input type="checkbox" name="option[]" value="go" /> go </input></span>
+              <span> <input type="checkbox" name="option[]" value="rust" /> rust </input></span>
             </div>
             <br />
-            <div class="Form-post-textarea">
-              <label>Post</label>
-              <textarea id="post" name="post" rows="4" cols="50"> </textarea>
-            </div>
-            <button id="form-btn-post" class="form-btn-post">Post</button>
-          </form>
-        </center>
+            <label> Title</label>
+            <input id="title" name="title" required />
       </div>
+      <br />
+      <div class="Form-post-textarea">
+        <label>Post</label>
+        <textarea id="post" name="post" rows="4" cols="50"> </textarea>
+      </div>
+      <button id="form-btn-post" class="form-btn-post">Post</button>
+      </form>
+      </center>
     </div>
+  </div>
   </div>
 
 </body>
 
-<script src="../frontend/js/myScript.js" ></script>
+<script src="../frontend/js/myScript.js"></script>
 
 </html>

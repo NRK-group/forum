@@ -17,7 +17,7 @@ import (
 // CreateUser
 // is a method of database that add user in it.
 func (forum *Forum) CreateUser(username, email, userAgent, ipAddress, pass string) (string, string, string, error) {
-	var date = time.Now().Format("2006 January 02 15:04:05")
+	var date = time.Now().Format("2006 January 02")
 	userID := uuid.NewV4()
 	pass, _ = password.HashPassword(pass)
 	stmt, err := forum.DB.Prepare(`
@@ -58,7 +58,7 @@ func (forum *Forum) CreateSession(userID, userAgent, ipAddress string) (string, 
 // CreatePost
 // is a method of database that add post in it.
 func (forum *Forum) CreatePost(userID, content, category, title string) (string, error) {
-	var date = time.Now().Format("2006 January 02 15:04:05")
+	var date = time.Now().Format("2006 January 02")
 	postID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
 		INSERT INTO Post (postID, userID, dateCreated, content, category, title) values (?, ?, ?, ?, ?, ?)
@@ -73,7 +73,7 @@ func (forum *Forum) CreatePost(userID, content, category, title string) (string,
 // CreateComment
 // is a method of database that add comment in it.
 func (forum *Forum) CreateComment(userID, postID, content string) (string, error) {
-	var date = time.Now().Format("2006 January 02 15:04:05")
+	var date = time.Now().Format("2006 January 02")
 	commentID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
 		INSERT INTO Comment (commentID, userID, postID, dateCreated, content) values (?, ?, ?, ?, ?)
@@ -525,4 +525,22 @@ func (forum *Forum) GetReactionsInComment(cID string) Reaction {
 		reaction.Dislikes = dislikes
 	}
 	return reaction
+}
+
+func (forum *Forum) GetUser(uID string) User {
+	var user User
+	rows, err := forum.DB.Query("SELECT username, datecreated FROM User WHERE userID = '" + uID + "'")
+	if err != nil {
+		fmt.Println(err)
+		return user
+	}
+	var username, datecreated string
+	for rows.Next() {
+		rows.Scan(&username, &datecreated)
+		user = User{
+			Username:    username,
+			DateCreated: datecreated,
+		}
+	}
+	return user
 }
