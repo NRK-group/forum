@@ -14,8 +14,9 @@
 </head>
 
 <body class="Body" onload="Onload('{{.Cookie}}')">
-  <!-- Navbar -->
-  <div class="Navbar">
+
+  <!-- ------------------------ start - Nav bar container ------------------------------- -->
+  <header class="Navbar">
     <div class="Navbar-logo"><span>01</span>Forum</div>
     <div class="Navbar-title">Questions</div>
     <div class="Navbar-buttons">
@@ -28,268 +29,269 @@
         <span><button id="logoutBtn" class="Nav-Logout-btn">Logout</button></span>
       </div>
     </div>
-  </div>
+  </header>
+  <!-- ------------------------ end - Nav bar container ------------------------------- -->
 
-  <!-- Sidebar -->
-  <div class="Sidebar">
-    <div class="Menu-Item-Search">
-      <p>Search</p>
-    </div>
-    <div class="Menu">
-      <p>MENU</p>
-    </div>
-    <div class="personal-menu">
-      <div id="Not_Login" class="Not_Login">
-
-      </div>
-      <form method="POST" action="/">
-        <div id="Login" class="Login">
-          <div>Personal Navigator</div>
-          <button type="submit" name="yourPost" value="on"> Your Post</button>
-          <button type="submit" name="yourLikedPosts" value="on"> Your liked Posts</button>
+  <!-- ------------------------ start - left container ------------------------------- -->
+  <div class="container">
+    <div class="left-container">
+      <div class="Sidebar">
+        <div class="Menu-Item-Search">
+          <label for="search-input" class="side-nav-title">Search:</label>
+          <input type="search" id="search-input" class="side-nav-title" style="font-family: FontAwesome;"
+            placeholder='&#xf002 Search...'>
         </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Post Filter section -->
-  <form method="POST" action="/">
-    <div class="post-filter">
-      <div class="radio-pillbox">
-        <radiogroup>
-          <div>
-            <button type="submit" name="filter" id="all" value="all">
-              <label for="all">All</label>
-            </button>
-          </div>
-          <div>
-            <button type="submit" name="filter" id="js" value="javascript">
-              <label for="js">JavaScript</label>
-            </button>
-          </div>
-
-          <div>
-            <button type="submit" name="filter" id="go" value="go">
-              <label for="go">Go</label>
-            </button>
-          </div>
-          <div>
-            <button type="submit" name="filter" id="rust" value="rust" checked>
-              <label for="rust">Rust</label>
-            </button>
-          </div>
-        </radiogroup>
-      </div>
-    </div>
-  </form>
-
-  <!-- Comments Section -->
-  <div class="Comments-section">
-    {{range .Posts}}
-    <div class="Comment" key="{{.PostID}}">
-      <div class="Comment-header">
-        <div class="chip">
-          <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-          <span>{{.UserID}}</span>
+        <div class="Menu">
+          <div class="side-nav-title">Menu</div>
+          <div>Questions</div>
+          <div>Tags</div>
+          <div>Ranking</div>
         </div>
-        <span class="right">{{.DateCreated}}</span>
-      </div>
-      <div class="Comment-body">
-        <h3>{{.Title}}</h3>
-        <p id="Content">
-          {{.Content}}
-        </p>
-      </div>
-      <div class="Comment-footer">
-        <span class="Category">{{.Category}}</span>
-        <div class="Left-Comment-footer">
+        <div class="personal-menu">
+          <!-- guest user -->
           <div id="Not_Login" class="Not_Login">
-            <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}'>{{.Reaction.Likes}} like</button>
-            <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}">{{.Reaction.Dislikes}}
-              dislike</button>
           </div>
+          <!-- registered user -->
           <div id="Login" class="Login">
             <form method="POST" action="/">
-              <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}'>{{.Reaction.Likes}} like</button>
-              <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}">{{.Reaction.Dislikes}}
-                dislike</button>
+              <div class="side-nav">
+                <div class="side-nav-title">Personal Navigator</div>
+                <button type="submit" name="yourPost" value="on"> Your Post</button>
+                <button type="submit" name="yourLikedPosts" value="on"> Your liked Posts</button>
+              </div>
             </form>
           </div>
-          <button id="commentModalBtn" onclick="Comment('{{.PostID}}')">{{.NumOfComment}} Comments</button>
+
         </div>
       </div>
     </div>
-    <div class="dropdown">
-      <div id='{{.PostID}}' class="dropdown-content">
-        <div>
-          <form class="Form_comment" method="POST" action="/" id="Form-comment">
-            <div class="Form-comment-textarea">
-              <textarea id="comment" name="comment" rows="10" cols="50" required></textarea>
-            </div>
-            <button type="submit" value='{{.PostID}}' name="postID" class="form-btn-comment">Comment</button>
-          </form>
+    <!-- ------------------------ start - left container ------------------------------- -->
 
-          <br />
-          </center>
-          {{range .Comments}}
-          <div class="Comment-box">
-            <div class="chip">
+    <!-- ------------------------ start - Middle container ------------------------------- -->
+    <div class="middle-container">
+      <!-- ------------------------ start - Post filter section ------------------------------- -->
+      <div class="post-filter">
+        <form method="POST" action="/">
+          <div class="radio-pillbox">
+            <radiogroup>
+              <button type="submit" name="filter" id="all" value="all"><label for="all">All</label></button>
+              <button type="submit" name="filter" id="js" value="javascript"><label for="js">JavaScript</label></button>
+              <button type="submit" name="filter" id="go" value="go"><label for="go">Go</label></button>
+              <button type="submit" name="filter" id="rust" value="rust" checked><label for="rust">Rust</label></button>
+            </radiogroup>
+          </div>
+        </form>
+      </div>
+      <!-- ------------------------ end - Post filter section ------------------------------- -->
+
+      <!-- ------------------------ start - Post section ------------------------------- -->
+      <div class="post-section">
+        {{range .Posts}}
+        <div class="Comment" key="{{.PostID}}">
+          <div class="Comment-header">
+            <span class="profile">
               <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-              <div>{{.UserID}}</div>
-              <div>{{.DateCreated}}</div>
-            </div>
-            <p>
+              <span>{{.UserID}}</span>
+            </span>
+            <span class="date">{{.DateCreated}}</span>
+          </div>
+          <div class="Comment-body">
+            <h3>{{.Title}}</h3>
+            <p id="Content">
               {{.Content}}
             </p>
-            <div>
+          </div>
+          <div class="Comment-footer">
+            <span class="Category">{{.Category}}</span>
+            <div class="Left-Comment-footer">
+              <!-- guest user -->
               <div id="Not_Login" class="Not_Login">
-                <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}">
-                  {{.Reaction.Likes}} like</button>
-                <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}">
-                  {{.Reaction.Dislikes}} dislike</button>
+                <div class="reactions">{{.Reaction.Likes}} Likes</div>
+                <div class="reactions">{{.Reaction.Dislikes}} Dislikes</div>
               </div>
+              <!-- registered user -->
               <div id="Login" class="Login">
                 <form method="POST" action="/">
-                  <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}">
-                    {{.Reaction.Likes}} like</button>
-                  <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}">
-                    {{.Reaction.Dislikes}} dislike</button>
+                  <button type="submit" name="likes" id="Likes" value='1&{{.PostID}}'>{{.Reaction.Likes}} Likes</button>
+                  <button type="submit" name="dislike" id="dislike" value="-1&{{.PostID}}">{{.Reaction.Dislikes}}
+                    Dislikes</button>
                 </form>
               </div>
+              <button id="commentModalBtn" onclick="Comment('{{.PostID}}')">{{.NumOfComment}} Comments</button>
             </div>
           </div>
-          <br />
-          {{end}}
+        </div>
+        <!-- ------------------------ end - Post section ------------------------------- -->
+
+        <!-- ------------------------ start - Comment section ------------------------------- -->
+        <div class="dropdown">
+          <div id='{{.PostID}}' class="dropdown-content">
+            <form class="Form_comment" method="POST" action="/" id="Form-comment">
+              <div class="Form-comment-textarea">
+                <textarea id="comment" name="comment" rows="10" cols="50" required></textarea>
+              </div>
+              <button class="form-btn-comment" type="submit" value='{{.PostID}}' name="postID">Comment</button>
+            </form>
+            {{range .Comments}}
+            <div class="Comment-box">
+              <div class="Comment-header">
+                <span class="profile">
+                  <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
+                  <span>{{.UserID}}</span>
+                </span>
+                <span class="date">{{.DateCreated}}</span>
+              </div>
+              <p>
+                {{.Content}}
+              </p>
+              <div class="dropdown-comment-footer">
+                <!-- guest user -->
+                <div id="Not_Login" class="Not_Login">
+                  <div class="reactions">{{.Reaction.Likes}} Likes</div>
+                  <div class="reactions">{{.Reaction.Dislikes}} Dislikes</div>
+                </div>
+                <!--registered user -->
+                <div id="Login" class="Login">
+                  <form method="POST" action="/">
+                    <button type="submit" name="likesc" id="Likesc" value="1&{{.CommentID}}&{{.PostID}}">
+                      {{.Reaction.Likes}} Likes</button>
+                    <button type="submit" name="dislikec" id="dislikec" value="-1&{{.CommentID}}&{{.PostID}}">
+                      {{.Reaction.Dislikes}} Dislikes</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {{end}}
+          </div>
+        </div>
+        <!-- ------------------------ end - Comment section ------------------------------- -->
+        {{end}}
+      </div>
+    </div>
+    <!-- ------------------------end Middle container------------------------------- -->
+
+    <!-- ------------------------ start - Right container ------------------------------- -->
+    <div class="right-container">
+      <div class="Help-box">
+        <!-- registered user -->
+        <div id="Login" class="Login">
+          <div class="login-content">
+            <div class="login-profile">
+              <img src="../frontend/img/avatar.png" alt="Person" class="userpic" />
+              <div class="UserName">{{.CurrentUser.Username}}</div>
+            </div>
+            <div class="login-profile-btn">
+              <button>Edit Profile</button>
+            </div>
+          </div>
+        </div>
+        <!-- guest user -->
+        <div id="Not_Login" class="Not_Login">
+          Featured Links
+          <!-- Add links here -->
         </div>
       </div>
     </div>
-    {{end}}
   </div>
+  <!-- ------------------------ end - Right container ------------------------------- -->
 
-  <div class="Help-box">
-    <div id="Login" class="Login">
-      <img src="../frontend/img/avatar.png" alt="Person" width="96" height="96" />
-      <div>{{.CurrentUser.Username}}</div>
-      <div>{{.CurrentUser.DateCreated}}</div>
-    </div>
-    <div id="Not_Login" class="Not_Login">
-      Featured Links
-      <!-- <div>Featured links</div>
-      <div><a class="link" href="http://localhost:8800/">http://localhost:8800</a></div>
-      <div><a class="link" href="https://stackoverflow.com/questions">https://stackoverflow.com/questions</a></div>
-      <div><a class="link" href="https://git.learn.01founders.co">https://git.learn.01founders.co</a></div> -->
-    </div>
-  </div>
-
-  <!-- The Login Modal -->
+  <!-- ------------------------ start - Login Modal ------------------------------- -->
   <div id="loginModal" class="Modal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="lclose">&times;</span>
       <h1>Login</h1>
-      <div>
-        <center>
-          <br /><br />
-          <form class="Form">
-            <div class="Form-login-inputBox">
-              <label> User Name</label>
-              <input type="text" id="userName" name="userName" />
-            </div>
-            <br />
-            <div class="Form-login-inputBox">
-              <label>Password</label>
-              <input type="password" id="password" name="password" />
-            </div>
-            <button id="form-btn-login" class="Form-btn-login">Login</button>
-          </form>
-          <br />
-          <label id="login-err" style="color:red;"></label>
-          <div class="Form-login-Signup-div">
-            <p>Need an account?</p>
-            <button id="registerBtnl" class="Form-login-Signup-btn">
-              SIGN UP
-            </button>
+      <center>
+        <form class="Form">
+          <div class="Form-login-inputBox">
+            <label> User Name</label>
+            <input type="text" id="userName" name="userName" />
           </div>
-        </center>
-      </div>
+
+          <div class="Form-login-inputBox">
+            <label>Password</label>
+            <input type="password" id="password" name="password" />
+          </div>
+          <button id="form-btn-login" class="Form-btn-login">Login</button>
+        </form>
+        <label id="login-err" style="color:red;"></label>
+        <div class="Form-login-Signup-div">
+          <p>Need an account?</p>
+          <button id="registerBtnl" class="Form-login-Signup-btn">
+            SIGN UP
+          </button>
+        </div>
+      </center>
     </div>
   </div>
+  <!-- ------------------------ end - Login Modal ------------------------------- -->
 
-  <!-- The Register Modal -->
+  <!-- ------------------------ start - Register Modal ------------------------------- -->
   <div id="registerModal" class="Rmodal">
-    <!-- Modal content -->
     <div class="modal-content">
       <span class="rclose">&times;</span>
       <h1>Register</h1>
       <div>
-        <center>
-          <br /><br />
-          <form class="Form">
-            <div class="Form-login-inputBox">
-              <label> User Name</label>
-              <input type="text" id="rUserName" name="userName" />
-            </div>
-            <br />
-            <div class="Form-login-inputBox">
-              <label>Email</label>
-              <input type="email" id="rEmail" name="email" />
-            </div>
-            <br />
-            <div class="Form-login-inputBox">
-              <label>Password</label>
-              <input type="password" id="rPassword" name="password" />
-            </div>
-            <button id="form-btn-register" class="Form-btn-register">
-              Register
-            </button>
-          </form>
-          <br />
-          <label id="register-err" style="color:red;"></label>
-          <div class="Form-login-Signup-div">
-            <p>Already a user?</p>
-            <button id="loginBtnr" class="Form-login-Signup-btn">
-              LOGIN
-            </button>
+        <form class="Form">
+          <div class="Form-login-inputBox">
+            <label> User Name</label>
+            <input type="text" id="rUserName" name="userName" />
           </div>
-        </center>
+          <div class="Form-login-inputBox">
+            <label>Email</label>
+            <input type="email" id="rEmail" name="email" />
+          </div>
+          <div class="Form-login-inputBox">
+            <label>Password</label>
+            <input type="password" id="rPassword" name="password" />
+          </div>
+          <button id="form-btn-register" class="Form-btn-register">
+            Register
+          </button>
+        </form>
+        <label id="register-err" style="color:red;"></label>
+        <div class="Form-login-Signup-div">
+          <p>Already a user?</p>
+          <button id="loginBtnr" class="Form-login-Signup-btn">
+            LOGIN
+          </button>
+        </div>
       </div>
     </div>
   </div>
+  <!-- ------------------------ end - Register modal ------------------------------- -->
 
-  <!-- The Post Modal -->
+  <!-- ------------------------ start - Post modal ------------------------------- -->
   <div id="postModal" class="Pmodal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="pclose">&times;</span>
       <h1>Post</h1>
       <div>
-        <center>
-          <br /><br />
-          <form class="Form">
-            <div class="Form-post-inputBox">
-              <label for="Categories">Categories:</label>
-              <span><input type="checkbox" name="option[]" value="javascript"> javascript </input></span>
-              <span><input type="checkbox" name="option[]" value="go" /> go </input></span>
-              <span> <input type="checkbox" name="option[]" value="rust" /> rust </input></span>
-            </div>
-            <br />
-            <label> Title</label>
-            <input id="title" name="title" required />
+        <form class="Form">
+          <div class="Form-post-inputBox">
+            <label for="Categories">Categories:</label>
+            <span><input type="checkbox" name="option[]" value="javascript"> javascript </input></span>
+            <span><input type="checkbox" name="option[]" value="go" /> go </input></span>
+            <span><input type="checkbox" name="option[]" value="rust" /> rust </input></span>
+          </div>
+          <label>Title</label>
+          <input id="title" name="title" required />
+        </form>
       </div>
-      <br />
       <div class="Form-post-textarea">
         <label>Post</label>
         <textarea id="post" name="post" rows="4" cols="50"> </textarea>
+        <button id="form-btn-post" class="form-btn-post">Post</button>
       </div>
-      <button id="form-btn-post" class="form-btn-post">Post</button>
-      </form>
-      </center>
+
     </div>
   </div>
   </div>
-
+  <!-- ------------------------ end - Post modal ------------------------------- -->
 </body>
 
 <script src="../frontend/js/myScript.js"></script>
+<script src="https://kit.fontawesome.com/569078f135.js" crossorigin="anonymous"></script>
 
 </html>
