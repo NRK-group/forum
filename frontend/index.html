@@ -200,28 +200,32 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span class="lclose">&times;</span>
-      <h1>Login</h1>
-      <center>
-        <form class="Form">
-          <div class="Form-login-inputBox">
-            <label> User Name</label>
-            <input type="text" id="userName" name="userName" />
-          </div>
-
-          <div class="Form-login-inputBox">
-            <label>Password</label>
-            <input type="password" id="password" name="password" />
-          </div>
-          <button id="form-btn-login" class="Form-btn-login">Login</button>
-        </form>
-        <label id="login-err" style="color:red;"></label>
-        <div class="Form-login-Signup-div">
-          <p>Need an account?</p>
-          <button id="registerBtnl" class="Form-login-Signup-btn">
-            SIGN UP
-          </button>
+      <div class="modal-title">Login</div>
+      <form class="Form">
+        <div class="Form-login-inputBox">
+          <label> User Name</label>
+          <input type="text" id="userName" name="userName" />
         </div>
-      </center>
+
+        <div class="Form-login-inputBox">
+          <label>Password</label>
+          <input type="password" id="password" name="password" />
+        </div>
+        <button id="form-btn-login" class="Form-btn-login">Login</button>
+      </form>
+      <label id="login-err" style="color:red;"></label>
+      <div class="Form-login-Signup-div">
+        <p>Need an account?</p>
+        <button id="registerBtnl" class="Form-login-Signup-btn">
+          SIGN UP
+        </button>
+      </div>
+      <div class="auth-btns">
+        <label for="">Login with</label>
+        <button id="auth-google-btn"><img src="../frontend/img/google-svgrepo-com.svg" alt="GOOGLE"></button>
+        <label for="">or</label>
+        <button id="auth-github-btn"><img src="../frontend/img/github-svgrepo-com.svg" alt=""></button>
+      </div>
     </div>
   </div>
   <!-- ------------------------ end - Login Modal ------------------------------- -->
@@ -230,7 +234,7 @@
   <div id="registerModal" class="Rmodal">
     <div class="modal-content">
       <span class="rclose">&times;</span>
-      <h1>Register</h1>
+      <div class="modal-title">Register</div>
       <div>
         <form class="Form">
           <div class="Form-login-inputBox">
@@ -255,6 +259,12 @@
           <button id="loginBtnr" class="Form-login-Signup-btn">
             LOGIN
           </button>
+        </div>
+        <div class="auth-btns">
+          <label> Register with</label>
+          <button id="auth-google-btn"><img src="../frontend/img/google-svgrepo-com.svg" alt="GOOGLE"></button>
+          <label>or</label>
+          <button id="auth-github-btn"><img src="../frontend/img/github-svgrepo-com.svg" alt=""></button>
         </div>
       </div>
     </div>
@@ -285,7 +295,7 @@
         </div>
         <div class="Form-post-textarea">
           <label for="post">Content:</label>
-          <textarea id="post" name="post"required placeholder="Enter post..."></textarea>
+          <textarea id="post" name="post" required placeholder="Enter post..."></textarea>
         </div>
         <div class="modal-btn">
           <button class="Nav-Logout-btn">Add Image</button>

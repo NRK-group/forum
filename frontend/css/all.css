@@ -432,7 +432,7 @@ input {
 
 .modal-title {
   font-size: 30px;
-  margin-bottom: 20px;
+  margin: 20px 0px 20px 0px;
 }
 .Form-post-textarea{
   height:200px;
@@ -512,6 +512,20 @@ input {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+.auth-btns{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.auth-btns img{
+  height: 25px;
+  width: 25px;
+  margin: 5px;
+}
+.auth-btns button{
+  margin: 10px;
+  border-radius: 50%;
 }
 /* end - for the modals */
 
