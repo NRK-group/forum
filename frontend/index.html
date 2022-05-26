@@ -266,27 +266,33 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span class="pclose">&times;</span>
-      <h1>Post</h1>
-      <div>
-        <form class="Form">
-          <div class="Form-post-inputBox">
-            <label for="Categories">Categories:</label>
-            <span><input type="checkbox" name="option[]" value="javascript"> javascript </input></span>
-            <span><input type="checkbox" name="option[]" value="go" /> go </input></span>
-            <span><input type="checkbox" name="option[]" value="rust" /> rust </input></span>
+      <div class="modal-title">Post</div>
+      <form class="Form">
+        <div class="Form-post-inputBox">
+          <label>Categories:</label>
+          <div class="categories">
+            <input type="checkbox" name="option[]" id="Go" value="go">
+            <label for="Go">Go</label>
+            <input type="checkbox" name="option[]" id="JavaScript" value="javascript">
+            <label for="JavaScript">Javascript</label>
+            <input type="checkbox" name="option[]" id="Rust" value="rust">
+            <label for="Rust">Rust</label>
           </div>
-          <label>Title</label>
-          <input id="title" name="title" required />
-        </form>
-      </div>
-      <div class="Form-post-textarea">
-        <label>Post</label>
-        <textarea id="post" name="post" rows="4" cols="50"> </textarea>
-        <button id="form-btn-post" class="form-btn-post">Post</button>
-      </div>
-
+        </div>
+        <div class="post-title-con">
+          <label for="title">Title:</label>
+          <input id="title" name="title" required placeholder="Enter title...">
+        </div>
+        <div class="Form-post-textarea">
+          <label for="post">Content:</label>
+          <textarea id="post" name="post"required placeholder="Enter post..."></textarea>
+        </div>
+        <div class="modal-btn">
+          <button class="Nav-Logout-btn">Add Image</button>
+          <button id="form-btn-post" class="Nav-Post-btn">Post</button>
+        </div>
+      </form>
     </div>
-  </div>
   </div>
   <!-- ------------------------ end - Post modal ------------------------------- -->
 </body>
