@@ -1,17 +1,45 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"forum/database"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 )
 
 type Env struct {
 	Forum *database.Forum
+}
+
+type OAuthAccessResponse struct {
+	AccessToken string `json:"access_token"`
+}
+
+type Ghuser struct {
+	Login string `json:"login"`
+	Id    int    `json:"id"`
+}
+
+type Guser struct {
+	Name  string `json:"given_name"`
+	Email string `json:"email"`
+	ID    string `json:"id"`
+}
+
+type Email []struct {
+	Payload struct {
+		Commits []struct {
+			Author struct {
+				Email string `json:"email"`
+			} `json:"author"`
+		} `json:"commits"`
+	} `json:"payload"`
 }
 
 func (env *Env) CheckCookie(w http.ResponseWriter, c *http.Cookie) []string {
@@ -252,4 +280,208 @@ func (env *Env) Comment(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 		}
 	}
+}
+
+func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/login/callback" {
+		http.Error(w, "404 not found.", http.StatusNotFound)
+		return
+	}
+
+
+
+	const clientID = "c298bb52526f90357763"
+	const clientSecret = "66afb6c6f8ce0259a92799823210c2bfd2625e58"
+
+
+	httpClient := http.Client{}
+
+	// First, we need to get the value of the `code` query param
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse query: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	code := r.FormValue("code")
+
+	// Next, lets for the HTTP request to call the github oauth enpoint
+	// to get our access token
+	reqURL := fmt.Sprintf("https://github.com/login/oauth/access_token?client_id=%s&client_secret=%s&code=%s", clientID, clientSecret, code)
+	req, err := http.NewRequest(http.MethodPost, reqURL, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "could not create HTTP request: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	// We set this header since we want the response
+	// as JSON
+	req.Header.Set("accept", "application/json")
+
+	// Send out the HTTP request
+	res, err := httpClient.Do(req)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "could not send HTTP request: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	defer res.Body.Close()
+
+	// Parse the request body into the `OAuthAccessResponse` struct
+	var t OAuthAccessResponse
+	if err := json.NewDecoder(res.Body).Decode(&t); err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	// Finally, send a response to redirect the user to the "welcome" page
+	// with the access token
+
+	req, err = http.NewRequest("GET", "https://api.github.com/user", nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	req.Header.Set("Authorization", "token "+t.AccessToken)
+
+	res, err = httpClient.Do(req)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	defer res.Body.Close()
+
+	var user Ghuser
+
+	if err := json.NewDecoder(res.Body).Decode(&user); err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	req, err = http.NewRequest("GET", "https://api.github.com/users/"+user.Login+"/events/public", nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	res, err = httpClient.Do(req)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	defer res.Body.Close()
+
+	var email Email
+
+	if err := json.NewDecoder(res.Body).Decode(&email); err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Login, email[0].Payload.Commits[0].Author.Email, r.UserAgent(), GetIP(r), strconv.Itoa(user.Id))
+
+
+	if err4 != nil {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-type", "application/text")
+		w.Write([]byte("0" + err.Error()))
+		return
+	}
+
+	w.Header().Set("Location", "/")
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   UserID + "&" + SessionID + "&" + Username,
+		Expires: time.Now().Add(24 * time.Hour),
+	})
+
+		w.Header().Set("Location", "/?access="+UserID + "&" + SessionID + "&" + Username)
+		w.WriteHeader(http.StatusFound)
+}
+
+func (env *Env) Redirected2(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/login/callback/2" {
+		http.Error(w, "404 not found.", http.StatusNotFound)
+		return
+	}
+	const clientID = "1025088139209-li5k87h94rdp8cm1m81turmkucs7c2c0.apps.googleusercontent.com"
+	const clientSecret = "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"
+	httpClient := http.Client{}
+
+	// First, we need to get the value of the `code` query param
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse query: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	code := r.FormValue("code")
+
+	// Next, lets for the HTTP request to call the github oauth enpoint
+	// to get our access token
+	reqURL := fmt.Sprintf("https://oauth2.googleapis.com/token?client_id=%s&client_secret=%s&code=%s&grant_type=authorization_code&redirect_uri=http://localhost:8800/login/callback/2", clientID, clientSecret, code)
+	req, err := http.NewRequest(http.MethodPost, reqURL, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "could not create HTTP request: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	// We set this header since we want the response
+	// as JSON
+	req.Header.Set("accept", "application/json")
+
+	// Send out the HTTP request
+	res, err := httpClient.Do(req)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "could not send HTTP request: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	defer res.Body.Close()
+
+	// Parse the request body into the `OAuthAccessResponse` struct
+	var g OAuthAccessResponse
+	if err := json.NewDecoder(res.Body).Decode(&g); err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	// Finally, send a response to redirect the user to the "welcome" page
+	// with the access token
+
+	req, err = http.NewRequest("GET", "https://www.googleapis.com/userinfo/v2/me", nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	req.Header.Set("Authorization", "Bearer "+g.AccessToken)
+
+	res, err = httpClient.Do(req)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	defer res.Body.Close()
+
+	var user Guser
+
+	if err := json.NewDecoder(res.Body).Decode(&user); err != nil {
+		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Name, user.Email, r.UserAgent(), GetIP(r), user.ID)
+
+
+	if err4 != nil {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-type", "application/text")
+		w.Write([]byte("0" + err.Error()))
+		return
+	}
+	
+
+	w.Header().Set("Location", "/")
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   UserID + "&" + SessionID + "&" + Username,
+		Expires: time.Now().Add(24 * time.Hour),
+	})
+
+		w.Header().Set("Location", "/?access="+UserID + "&" + SessionID + "&" + Username)
+		w.WriteHeader(http.StatusFound)
 }

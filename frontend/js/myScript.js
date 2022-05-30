@@ -194,9 +194,18 @@ logoutBtn.onclick = function () {
 const Onload = (cookie) => {
   if (cookie !== "") {
     session = cookie.split("&")
-
+  
+    if (window.location.search.substring(1).length > 2){
+  
+      const query = window.location.search.substring(1);
+      const token = query.split("access=")[1];
+      token.split("-")
+      const date = new Date(Date.now() + (3600 * 1000 * 24))
+      document.cookie = "session_token="+token+"; expires="+ date +"; path=/";
+      window.location.replace("http://localhost:8800");
+    }
     if (session.length > 2) {
-      
+     
       for (let i =  Not_Login_div.length - 1; i >= 0; --i) {
         Not_Login_div[i].style.display = "none"
       }
@@ -208,7 +217,11 @@ const Onload = (cookie) => {
     } else {
       document.getElementById("Form-comment").style.display = "none"
     }
-  }
+    
+    
+  } 
+  
+ 
 }
 
 //--------------------------------------------

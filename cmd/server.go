@@ -22,6 +22,8 @@ func main() {
 	defer db.Close()
 	// Forum.Forum.RemoveSession("")
 	http.HandleFunc("/", Forum.Home)
+	http.HandleFunc("/login/callback", Forum.Redirected)
+	http.HandleFunc("/login/callback/2", Forum.Redirected2)
 	http.HandleFunc("/register", Forum.Register)
 	http.HandleFunc("/login", Forum.Login)
 	http.HandleFunc("/post", Forum.Post)

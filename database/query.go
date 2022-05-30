@@ -544,3 +544,24 @@ func (forum *Forum) GetUser(uID string) User {
 	}
 	return user
 }
+
+
+// OAuth sign in or register 
+// is a method will either login a user using a third-party or register the user then log them in
+func (forum *Forum) OauthSigninOrRegister(username1, email, userAgent, ipAddress, pass string) (string, string, string, error) {
+	
+	user, username, sessionID, err := forum.LoginUsers(username1, userAgent, ipAddress, pass+"123")
+
+	if err != nil {
+		_, _, _, err:=forum.CreateUser(username1, email, userAgent, ipAddress, pass+"123")
+		
+		if err == nil {
+	user, username, sessionID, _ := forum.LoginUsers(username1,userAgent, ipAddress, pass+"123")
+	
+	return user, username, sessionID, nil
+		}
+	}
+	
+	
+	return user, username, sessionID, nil
+}
