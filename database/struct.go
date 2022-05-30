@@ -51,3 +51,9 @@ type Reaction struct {
 	Likes      int
 	Dislikes   int
 }
+
+type Secret struct {
+	GhSecret string
+	GSecret     string
+	
+}

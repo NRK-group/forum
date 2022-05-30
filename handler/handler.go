@@ -288,12 +288,10 @@ func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
-
 	const clientID = "c298bb52526f90357763"
 	const clientSecret = "66afb6c6f8ce0259a92799823210c2bfd2625e58"
 
-
+fmt.Println(os.Getenv("GSecret"))
 	httpClient := http.Client{}
 
 	// First, we need to get the value of the `code` query param
