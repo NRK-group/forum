@@ -291,7 +291,6 @@ func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
 	const clientID = "c298bb52526f90357763"
 	const clientSecret = "66afb6c6f8ce0259a92799823210c2bfd2625e58"
 
-fmt.Println(os.Getenv("GSecret"))
 	httpClient := http.Client{}
 
 	// First, we need to get the value of the `code` query param
@@ -373,7 +372,6 @@ fmt.Println(os.Getenv("GSecret"))
 
 	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Login, email[0].Payload.Commits[0].Author.Email, r.UserAgent(), GetIP(r), strconv.Itoa(user.Id))
 
-
 	if err4 != nil {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
@@ -389,8 +387,8 @@ fmt.Println(os.Getenv("GSecret"))
 		Expires: time.Now().Add(24 * time.Hour),
 	})
 
-		w.Header().Set("Location", "/?access="+UserID + "&" + SessionID + "&" + Username)
-		w.WriteHeader(http.StatusFound)
+	w.Header().Set("Location", "/?access="+UserID+"&"+SessionID+"&"+Username)
+	w.WriteHeader(http.StatusFound)
 }
 
 func (env *Env) Redirected2(w http.ResponseWriter, r *http.Request) {
@@ -463,14 +461,12 @@ func (env *Env) Redirected2(w http.ResponseWriter, r *http.Request) {
 
 	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Name, user.Email, r.UserAgent(), GetIP(r), user.ID)
 
-
 	if err4 != nil {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-type", "application/text")
 		w.Write([]byte("0" + err.Error()))
 		return
 	}
-	
 
 	w.Header().Set("Location", "/")
 
@@ -480,6 +476,6 @@ func (env *Env) Redirected2(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(24 * time.Hour),
 	})
 
-		w.Header().Set("Location", "/?access="+UserID + "&" + SessionID + "&" + Username)
-		w.WriteHeader(http.StatusFound)
+	w.Header().Set("Location", "/?access="+UserID+"&"+SessionID+"&"+Username)
+	w.WriteHeader(http.StatusFound)
 }
