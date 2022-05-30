@@ -9,9 +9,12 @@ body {
   display: flex;
   scroll-behavior: smooth;
 }
-label{
-  color: #808080;;
+
+label {
+  color: #808080;
+  ;
 }
+
 textarea {
   border: 1px solid #ccc;
   background-color: #fbfbfb;
@@ -35,6 +38,12 @@ input {
 
 .Body {
   background: #fafafa;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 /* Start of the Nav Bar */
@@ -111,6 +120,7 @@ input {
   border: 1px solid #eaeaea;
   background: #eaeaea;
 }
+
 /* end of the Nav Bar */
 
 /* start -for identifying guest and user */
@@ -434,14 +444,16 @@ input {
   font-size: 30px;
   margin: 20px 0px 20px 0px;
 }
-.Form-post-textarea{
-  height:200px;
+
+.Form-post-textarea {
+  height: 200px;
 }
+
 .Form-post-textarea textarea {
   height: 80%;
   width: 100%;
   resize: none;
-  margin: 5px 0px 0px 0px ;
+  margin: 5px 0px 0px 0px;
 }
 
 .Modal,
@@ -468,11 +480,9 @@ input {
 
 .Form-btn-login,
 .Form-btn-register {
-  margin-top: 3vh;
   height: 35px;
   width: 210px;
-  margin-right: auto;
-  margin-left: auto;
+  margin: auto;
   border-radius: 8px;
   background: #F48023;
   font-size: large;
@@ -507,26 +517,30 @@ input {
   justify-content: center;
 }
 
-.modal-btn{
+.modal-btn {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
-.auth-btns{
+
+.auth-btns {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.auth-btns img{
+
+.auth-btns img {
   height: 25px;
   width: 25px;
   margin: 5px;
 }
-.auth-btns button{
+
+.auth-btns button {
   margin: 10px;
   border-radius: 50%;
 }
+
 /* end - for the modals */
 
 .lclose:hover,

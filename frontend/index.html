@@ -181,7 +181,7 @@
               <div class="UserName">{{.CurrentUser.Username}}</div>
             </div>
             <div class="login-profile-btn">
-              <button>Edit Profile</button>
+              <button id="edit-profile-btn" class="Nav-Logout-btn">Edit Profile</button>
             </div>
           </div>
         </div>
@@ -213,7 +213,9 @@
         </div>
         <button id="form-btn-login" class="Form-btn-login">Login</button>
       </form>
-      <label id="login-err" style="color:red;"></label>
+      <div class="center">
+        <label id="login-err" style="color:red;"></label>
+      </div>
       <div class="Form-login-Signup-div">
         <p>Need an account?</p>
         <button id="registerBtnl" class="Form-login-Signup-btn">
@@ -253,7 +255,9 @@
             Register
           </button>
         </form>
-        <label id="register-err" style="color:red;"></label>
+        <div class="center">
+          <label id="register-err" style="color:red;"></label>
+        </div>
         <div class="Form-login-Signup-div">
           <p>Already a user?</p>
           <button id="loginBtnr" class="Form-login-Signup-btn">
