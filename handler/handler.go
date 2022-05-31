@@ -32,14 +32,10 @@ type Guser struct {
 	ID    string `json:"id"`
 }
 
-type Email []struct {
-	Payload struct {
-		Commits []struct {
-			Author struct {
+type Email struct {
+
 				Email string `json:"email"`
-			} `json:"author"`
-		} `json:"commits"`
-	} `json:"payload"`
+	
 }
 
 func (env *Env) CheckCookie(w http.ResponseWriter, c *http.Cookie) []string {
@@ -331,6 +327,8 @@ func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
 	// Finally, send a response to redirect the user to the "welcome" page
 	// with the access token
 
+
+
 	req, err = http.NewRequest("GET", "https://api.github.com/user", nil)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -351,26 +349,9 @@ func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	req, err = http.NewRequest("GET", "https://api.github.com/users/"+user.Login+"/events/public", nil)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	
 
-	res, err = httpClient.Do(req)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	defer res.Body.Close()
-
-	var email Email
-
-	if err := json.NewDecoder(res.Body).Decode(&email); err != nil {
-		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
-		w.WriteHeader(http.StatusBadRequest)
-	}
-
-	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Login, email[0].Payload.Commits[0].Author.Email, r.UserAgent(), GetIP(r), strconv.Itoa(user.Id))
+	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Login, user.Login+"@gmail.com", r.UserAgent(), GetIP(r), strconv.Itoa(user.Id))
 
 	if err4 != nil {
 		w.WriteHeader(http.StatusOK)
