@@ -328,7 +328,7 @@ func (forum *Forum) AllPost(filter, uID string) []Post {
 			NumOfComment: len(forum.GetComments(postID)),
 			Reaction:     forum.GetReactionsInPost(postID),
 		}
-		fmt.Println("from query" + postID, userID, title, category, dateCreated, content, imgurl)
+
 		var username string
 		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
 		if err != nil {
