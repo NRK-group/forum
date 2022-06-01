@@ -64,7 +64,7 @@ func (forum *Forum) CreatePost(userID, content, category, title, imgUrl string) 
 		INSERT INTO Post (postID, userID, dateCreated, content, category, title, imgurl) values (?, ?, ?, ?, ?, ?, ?)
 	`)
 	_, err := stmt.Exec(postID, userID, date, content, category, title, imgUrl)
-	
+
 	if err != nil {
 		return "", err
 	}
@@ -323,7 +323,7 @@ func (forum *Forum) AllPost(filter, uID string) []Post {
 			Content:      content,
 			Category:     category,
 			Title:        title,
-			ImgUrl:        imgurl,
+			ImgUrl:       imgurl,
 			Comments:     forum.GetComments(postID),
 			NumOfComment: len(forum.GetComments(postID)),
 			Reaction:     forum.GetReactionsInPost(postID),
@@ -370,14 +370,15 @@ func (forum *Forum) YourPost(filter, uID string) []Post {
 		fmt.Print(err)
 		return posts
 	}
-	var postID, userID, title, category, dateCreated, content string
+	var postID, userID, title, category, dateCreated, img, content string
 	for rows.Next() {
-		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &content)
+		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &img, &content)
 		post = Post{
 			PostID:      postID,
 			DateCreated: dateCreated,
 			Content:     content,
 			Category:    category,
+			ImgUrl:      img,
 			Title:       title,
 		}
 		posts = append([]Post{post}, posts...)
@@ -404,9 +405,9 @@ func (forum *Forum) YourLikedPost(uID string) []Post {
 		fmt.Println(err)
 		return posts
 	}
-	var pID, userID, title, category, dateCreated, content string
+	var pID, userID, title, category, dateCreated, img, content string
 	for rows.Next() {
-		rows.Scan(&pID, &userID, &title, &category, &dateCreated, &content)
+		rows.Scan(&pID, &userID, &title, &category, &dateCreated, &img, &content)
 		post = Post{
 			PostID:       pID,
 			UserID:       userID,
@@ -414,6 +415,7 @@ func (forum *Forum) YourLikedPost(uID string) []Post {
 			Category:     category,
 			DateCreated:  dateCreated,
 			Content:      content,
+			ImgUrl:       img,
 			Comments:     forum.GetComments(pID),
 			Reaction:     forum.GetReactionsInPost(pID),
 			NumOfComment: len(forum.GetComments(pID)),
@@ -548,23 +550,16 @@ func (forum *Forum) GetUser(uID string) User {
 	return user
 }
 
-
-// OAuth sign in or register 
+// OAuth sign in or register
 // is a method will either login a user using a third-party or register the user then log them in
 func (forum *Forum) OauthSigninOrRegister(username1, email, userAgent, ipAddress, pass string) (string, string, string, error) {
-	
 	user, username, sessionID, err := forum.LoginUsers(username1, userAgent, ipAddress, pass+"123")
-
 	if err != nil {
-		_, _, _, err:=forum.CreateUser(username1, email, userAgent, ipAddress, pass+"123")
-		
+		_, _, _, err := forum.CreateUser(username1, email, userAgent, ipAddress, pass+"123")
 		if err == nil {
-	user, username, sessionID, _ := forum.LoginUsers(username1,userAgent, ipAddress, pass+"123")
-	
-	return user, username, sessionID, nil
+			user, username, sessionID, _ := forum.LoginUsers(username1, userAgent, ipAddress, pass+"123")
+			return user, username, sessionID, nil
 		}
 	}
-	
-	
 	return user, username, sessionID, nil
 }
