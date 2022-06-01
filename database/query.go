@@ -57,13 +57,14 @@ func (forum *Forum) CreateSession(userID, userAgent, ipAddress string) (string, 
 
 // CreatePost
 // is a method of database that add post in it.
-func (forum *Forum) CreatePost(userID, content, category, title string) (string, error) {
+func (forum *Forum) CreatePost(userID, content, category, title, imgUrl string) (string, error) {
 	var date = time.Now().Format("2006 January 02")
 	postID := uuid.NewV4()
 	stmt, _ := forum.DB.Prepare(`
-		INSERT INTO Post (postID, userID, dateCreated, content, category, title) values (?, ?, ?, ?, ?, ?)
+		INSERT INTO Post (postID, userID, dateCreated, content, category, title, imgurl) values (?, ?, ?, ?, ?, ?, ?)
 	`)
-	_, err := stmt.Exec(postID, userID, date, content, category, title)
+	_, err := stmt.Exec(postID, userID, date, content, category, title, imgUrl)
+	
 	if err != nil {
 		return "", err
 	}
@@ -313,19 +314,21 @@ func (forum *Forum) AllPost(filter, uID string) []Post {
 			return posts
 		}
 	}
-	var postID, userID, title, category, dateCreated, content string
+	var postID, userID, title, category, dateCreated, content, imgurl string
 	for rows.Next() {
-		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &content)
+		rows.Scan(&postID, &userID, &title, &category, &dateCreated, &imgurl, &content)
 		post = Post{
 			PostID:       postID,
 			DateCreated:  dateCreated,
 			Content:      content,
 			Category:     category,
 			Title:        title,
+			ImgUrl:        imgurl,
 			Comments:     forum.GetComments(postID),
 			NumOfComment: len(forum.GetComments(postID)),
 			Reaction:     forum.GetReactionsInPost(postID),
 		}
+		fmt.Println("from query" + postID, userID, title, category, dateCreated, content, imgurl)
 		var username string
 		rows2, err := forum.DB.Query("SELECT username FROM User WHERE userID = '" + userID + "'")
 		if err != nil {

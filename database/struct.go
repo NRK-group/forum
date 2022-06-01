@@ -28,6 +28,7 @@ type Post struct {
 	Title        string
 	Content      string
 	Category     string
+	ImgUrl       string
 	NumOfComment int
 	Comments     []Comment
 	Reaction     Reaction

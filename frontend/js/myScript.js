@@ -238,6 +238,8 @@ let pspan = document.getElementsByClassName("pclose")[0];
 // Get the post btn to post
 let postBtn = document.getElementById("form-btn-post");
 
+let imgInput = document.getElementById("img-input-id");
+
 // close and reset the post modal
 const Closepost = () => {
   pmodal.style.display = "none";
@@ -269,6 +271,7 @@ postBtn.onclick = function (event) {
       data.append("categories", categories);
       data.append("title", document.getElementById("title").value);
       data.append("post", document.getElementById("post").value);
+      data.append('file', imgInput.files[0]);
 
       fetch("http://localhost:8800/post",
         {
@@ -299,6 +302,15 @@ postModalBtn.onclick = function () {
 
 // When the user clicks on <span> (x), close the login modal
 pspan.onclick = () => Closepost()
+
+
+// set a limit on the file upload
+imgInput.onchange = function() {
+  if(this.files[0].size > 2097152){
+     alert("File is too big!");
+     this.value = "";
+  };
+};
 
 
 //--------------------------------------------

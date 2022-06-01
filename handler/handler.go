@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"forum/database"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -33,9 +34,7 @@ type Guser struct {
 }
 
 type Email struct {
-
-				Email string `json:"email"`
-	
+	Email string `json:"email"`
 }
 
 func (env *Env) CheckCookie(w http.ResponseWriter, c *http.Cookie) []string {
@@ -245,7 +244,53 @@ func (env *Env) Post(w http.ResponseWriter, r *http.Request) {
 			categories := r.FormValue("categories")
 			title := r.FormValue("title")
 			post := r.FormValue("post")
-			postID, _ := env.Forum.CreatePost(co[0], post, categories, title)
+
+		 imgUrl := " "
+
+			// Parse our multipart form, 10 << 20 specifies a maximum
+			// upload of 10 MB files.
+			r.ParseMultipartForm(10 << 20)
+
+			// FormFile returns the first file for the given key `myFile`
+			// it also returns the FileHeader so we can get the Filename,
+			// the Header and the size of the file
+			file, handler, err := r.FormFile("file")
+			fmt.Println(err)
+			if err == nil {
+
+				defer file.Close()
+				// Create a temporary file within our temp-images directory that follows
+				// a particular naming pattern
+				getFilePrefix := strings.Split(handler.Filename, ".")
+				var imgType string
+				imageTypes := "img png gif svg jpg jpeg"
+				// fmt.Print(getFileName[len(getFileName)-2])
+				if strings.Contains(imageTypes, getFilePrefix[len(getFilePrefix)-1]) {
+					if handler.Size > int64(20000000) {
+						fmt.Fprintf(w, "File size exceed")
+						return
+					}
+					imgType = getFilePrefix[len(getFilePrefix)-1]
+					tempFile, err := ioutil.TempFile("frontend/img", "*."+imgType)
+					if err != nil {
+						fmt.Println(err)
+					}
+					defer tempFile.Close()
+					imgUrl = "../" + tempFile.Name()
+					// read all of the contents of our uploaded file into a
+					// byte array
+					fileBytes, err := ioutil.ReadAll(file)
+					if err != nil {
+						fmt.Println(err)
+					}
+					// write this byte array to our temporary file
+					tempFile.Write(fileBytes)
+
+				}
+
+			}
+
+			postID, _ := env.Forum.CreatePost(co[0], post, categories, title, imgUrl)
 
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-type", "application/text")
@@ -327,8 +372,6 @@ func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
 	// Finally, send a response to redirect the user to the "welcome" page
 	// with the access token
 
-
-
 	req, err = http.NewRequest("GET", "https://api.github.com/user", nil)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -348,8 +391,6 @@ func (env *Env) Redirected(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(os.Stdout, "could not parse JSON response: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
 	}
-
-	
 
 	UserID, Username, SessionID, err4 := env.Forum.OauthSigninOrRegister(user.Login, user.Login+"@gmail.com", r.UserAgent(), GetIP(r), strconv.Itoa(user.Id))
 

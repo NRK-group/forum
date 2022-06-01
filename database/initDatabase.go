@@ -46,6 +46,7 @@ func initPost(db *sql.DB) {
 		"title"     TEXT NOT NULL,
 		"category"	TEXT NOT NULL,
 		"dateCreated" TEXT NOT NULL,
+		"imgurl"	TEXT NOT NULL,
 		"content"	TEXT NOT NULL,
 		PRIMARY KEY("postID")
 		FOREIGN KEY ("userID")
