@@ -101,7 +101,11 @@
               {{.Content}}
             </p>
           </div>
+          {{if eq .ImgUrl " "}}
+          <p></p>
+          {{else}}
           <img src={{.ImgUrl}} alt="Person" width="96" height="96" />
+          {{end}}
           <div class="Comment-footer">
             <span class="Category">{{.Category}}</span>
             <div class="Left-Comment-footer">
